@@ -8,7 +8,7 @@
     <artifactId>uraltranscom</artifactId>
     <name>UralTransCom</name>
     <packaging>war</packaging>
-    <version>4.2</version>
+    <version>4.3</version>
   
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
