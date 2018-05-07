@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  * Класс расчета количества дней, затраченных вагоном за один цикл. По вагонам количесво дней суммируется
  *
  * @author Vladislav Klochkov
- * @version 4.1
+ * @version 4.3
  * @create 08.11.2017
  *
  * 12.01.2018
@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
  *   1. Версия 4.0
  * 23.04.2018
  *   1. Версия 4.1
+ * 07.05.2018
+ *   1. Версия 4.3
  *
  */
 
@@ -28,6 +30,8 @@ public class GetFullMonthCircleOfWagonImpl extends JavaHelperBase implements Get
     // Подключаем логгер
     private static Logger logger = LoggerFactory.getLogger(GetFullMonthCircleOfWagonImpl.class);
 
+    private int numberDaysToEmpty; // Число дней для проезда порожняком
+
     private GetFullMonthCircleOfWagonImpl() {
     }
 
@@ -35,15 +39,25 @@ public class GetFullMonthCircleOfWagonImpl extends JavaHelperBase implements Get
     public int fullDays(String typeOfWagon, Integer distanceOfEmpty, String distanceOfRoute) {
         int fullMonthCircle = 0;
 
-        fullMonthCircle += Math.round(distanceOfEmpty / 300f + 1);
+        numberDaysToEmpty = Math.round(distanceOfEmpty / KILOMETERS_IN_DAY + 1);
+
+        fullMonthCircle += numberDaysToEmpty;
         if (typeOfWagon.equals(TYPE_OF_WAGON_KR)) {
             fullMonthCircle += LOADING_OF_WAGON_KR;
         } else {
             fullMonthCircle += LOADING_OF_WAGON_PV;
         }
-        fullMonthCircle += Math.round(Integer.parseInt(distanceOfRoute) / 300f + 1);
+        fullMonthCircle += Math.round(Integer.parseInt(distanceOfRoute) / KILOMETERS_IN_DAY + 1);
         fullMonthCircle += UNLOADING_OF_WAGON;
 
         return fullMonthCircle;
+    }
+
+    public int getNumberDaysToEmpty() {
+        return numberDaysToEmpty;
+    }
+
+    public void setNumberDaysToEmpty(int numberDaysToEmpty) {
+        this.numberDaysToEmpty = numberDaysToEmpty;
     }
 }

@@ -5,7 +5,7 @@ package com.uraltranscom.service.export;
  * Класс записи в файл Excel
  *
  * @author Vladislav Klochkov
- * @version 4.2
+ * @version 4.3
  * @create 09.11.2017
  *
  * 12.01.2018
@@ -14,6 +14,8 @@ package com.uraltranscom.service.export;
  *   1. Версия 4.0
  * 25.04.2018
  *   1. Версия 4.2
+ * 07.05.2018
+ *   1. Версия 4.3
  *
  */
 
@@ -40,7 +42,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -58,7 +59,7 @@ public class WriteToFileExcel extends JavaHelperBase {
     private WriteToFileExcel() {
     }
 
-    public static void downloadFileExcel(HttpServletResponse response, List<String>... listOfFinal) {
+    /*public static void downloadFileExcel(HttpServletResponse response, List<String>... listOfFinal) {
         try {
             xssfWorkbook = new XSSFWorkbook();
             xssfWorkbook.createSheet("Распределенные рейсы");
@@ -79,7 +80,7 @@ public class WriteToFileExcel extends JavaHelperBase {
             isOk = false;
         }
 
-    }
+    }*/
 
     public static void downloadFileExcel(HttpServletResponse response, Map<WagonFinalInfo, Route> map) {
         try {
@@ -129,6 +130,12 @@ public class WriteToFileExcel extends JavaHelperBase {
                                             cell.setCellValue(buildText(mapForAdd.getKey().getDistanceEmpty(), mapForAdd.getKey().getCountCircleDays()));
                                             cell.setCellStyle(cellStyle(sheet));
                                         }
+                                        if (row.getCell(q).getStringCellValue().trim().equals("Период подачи")) {
+                                            Cell cell = xssfRow.createCell(q);
+                                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(FORMAT_DATE);
+                                            cell.setCellValue(simpleDateFormat.format(mapForAdd.getKey().getDeliveryPeriod().getPeriodFrom()) + "-" + simpleDateFormat.format(mapForAdd.getKey().getDeliveryPeriod().getPeriodTo()));
+                                            cell.setCellStyle(cellStyle(sheet));
+                                        }
                                     }
                                 }
                             }
@@ -161,7 +168,7 @@ public class WriteToFileExcel extends JavaHelperBase {
     }
 
     // Метод записи в файл
-    public static synchronized void writeToFileExcel(HttpServletResponse response, List<String>... listOfFinalArray) {
+    /*public static synchronized void writeToFileExcel(HttpServletResponse response, List<String>... listOfFinalArray) {
         try {
             ServletOutputStream outputStream = response.getOutputStream();
             for (int i = 0; i < xssfWorkbook.getNumberOfSheets(); i++) {
@@ -183,7 +190,7 @@ public class WriteToFileExcel extends JavaHelperBase {
         } catch (Exception e) {
             logger.error("Ошибка записи в файл - {}", e.getMessage());
         }
-    }
+    }*/
 
     public static boolean isIsOk() {
         return isOk;

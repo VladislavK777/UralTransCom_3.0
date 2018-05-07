@@ -1,8 +1,11 @@
 package com.uraltranscom.model_ext;
 
+import com.uraltranscom.model.additional_model.DeliveryPeriod;
+import com.uraltranscom.service.additional.JavaHelperBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 /**
@@ -10,15 +13,17 @@ import java.util.Objects;
  * Класс для формирвоания итоговой информации для вагона
  *
  * @author Vladislav Klochkov
- * @version 4.1
+ * @version 4.3
  * @create 04.04.2018
  *
  * 24.04.2018
  *   1. Версия 4.1
+ * 07.05.2018
+ *   1. Версия 4.3
  *
  */
 
-public class WagonFinalInfo {
+public class WagonFinalInfo extends JavaHelperBase {
     // Подключаем логгер
     private static Logger logger = LoggerFactory.getLogger(WagonFinalInfo.class);
 
@@ -28,20 +33,27 @@ public class WagonFinalInfo {
     private String nameOfStationDepartureOfWagon; // Станция, куда едет вагон порожний
     private String route; // Маршрут
     private String cargo; // Груз
+    private DeliveryPeriod deliveryPeriod; // Период подачи вагона
+    private String deliveryPeriodToString; // Период подачи для веб-морды
 
-    public WagonFinalInfo(String numberOfWagon, int countCircleDays, int distanceEmpty) {
+    // Для выгрузки в файл
+    public WagonFinalInfo(String numberOfWagon, int countCircleDays, int distanceEmpty, DeliveryPeriod deliveryPeriod) {
         this.numberOfWagon = numberOfWagon;
         this.countCircleDays = countCircleDays;
         this.distanceEmpty = distanceEmpty;
+        this.deliveryPeriod = deliveryPeriod;
     }
 
-    public WagonFinalInfo(String numberOfWagon, int countCircleDays, int distanceEmpty, String nameOfStationDepartureOfWagon, String route, String cargo) {
+    // Для отображения в веб-морде
+    public WagonFinalInfo(String numberOfWagon, int countCircleDays, int distanceEmpty, String nameOfStationDepartureOfWagon, String route, String cargo, DeliveryPeriod deliveryPeriod) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(FORMAT_DATE);
         this.numberOfWagon = numberOfWagon;
         this.countCircleDays = countCircleDays;
         this.distanceEmpty = distanceEmpty;
         this.nameOfStationDepartureOfWagon = nameOfStationDepartureOfWagon;
         this.route = route;
         this.cargo = cargo;
+        this.deliveryPeriodToString = simpleDateFormat.format(deliveryPeriod.getPeriodFrom()) + "-" + simpleDateFormat.format(deliveryPeriod.getPeriodTo());
     }
 
     public String getNumberOfWagon() {
@@ -92,6 +104,22 @@ public class WagonFinalInfo {
         this.cargo = cargo;
     }
 
+    public DeliveryPeriod getDeliveryPeriod() {
+        return deliveryPeriod;
+    }
+
+    public void setDeliveryPeriod(DeliveryPeriod deliveryPeriod) {
+        this.deliveryPeriod = deliveryPeriod;
+    }
+
+    public String getDeliveryPeriodToString() {
+        return deliveryPeriodToString;
+    }
+
+    public void setDeliveryPeriodToString(String deliveryPeriodToString) {
+        this.deliveryPeriodToString = deliveryPeriodToString;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -102,13 +130,15 @@ public class WagonFinalInfo {
                 Objects.equals(numberOfWagon, that.numberOfWagon) &&
                 Objects.equals(nameOfStationDepartureOfWagon, that.nameOfStationDepartureOfWagon) &&
                 Objects.equals(route, that.route) &&
-                Objects.equals(cargo, that.cargo);
+                Objects.equals(cargo, that.cargo) &&
+                Objects.equals(deliveryPeriod, that.deliveryPeriod) &&
+                Objects.equals(deliveryPeriodToString, that.deliveryPeriodToString);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(numberOfWagon, countCircleDays, distanceEmpty, nameOfStationDepartureOfWagon, route, cargo);
+        return Objects.hash(numberOfWagon, countCircleDays, distanceEmpty, nameOfStationDepartureOfWagon, route, cargo, deliveryPeriod, deliveryPeriodToString);
     }
 
     @Override
@@ -118,6 +148,7 @@ public class WagonFinalInfo {
                 ", " + route +
                 ", " + countCircleDays +
                 ", " + distanceEmpty +
-                ", " + cargo;
+                ", " + cargo +
+                ", " + deliveryPeriodToString;
     }
 }

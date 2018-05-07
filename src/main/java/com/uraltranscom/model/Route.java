@@ -1,10 +1,13 @@
 package com.uraltranscom.model;
 
+import com.uraltranscom.model.additional_model.DeliveryPeriod;
 import com.uraltranscom.model.additional_model.VolumePeriod;
 import com.uraltranscom.model.additional_model.WagonType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -12,7 +15,7 @@ import java.util.Objects;
  * Класс Маршрута
  *
  * @author Vladislav Klochkov
- * @version 4.2
+ * @version 4.3
  * @create 17.11.2017
  *
  * 12.01.2018
@@ -23,6 +26,8 @@ import java.util.Objects;
  *   1. Версия 4.1
  * 24.04.2018
  *   1. Версия 4.2
+ * 07.05.2018
+ *   1. Версия 4.3
  *
  */
 
@@ -42,8 +47,9 @@ public class Route {
     private String numberOrder; // Номер заявки
     private String cargo; // Груз
     private WagonType wagonType; // Тип вагона
+    private Map<Integer, List<DeliveryPeriod>> deliveryPeriodMap; // Период подачи
 
-    public Route(String keyOfStationDeparture, String nameOfStationDeparture, String keyOfStationDestination, String nameOfStationDestination, String distanceOfWay, String customer, int countOrders, VolumePeriod volumePeriod, String numberOrder, String cargo, WagonType wagonType) {
+    public Route(String keyOfStationDeparture, String nameOfStationDeparture, String keyOfStationDestination, String nameOfStationDestination, String distanceOfWay, String customer, int countOrders, VolumePeriod volumePeriod, String numberOrder, String cargo, WagonType wagonType, Map<Integer, List<DeliveryPeriod>> deliveryPeriodMap) {
         this.keyOfStationDeparture = keyOfStationDeparture;
         this.nameOfStationDeparture = nameOfStationDeparture;
         this.keyOfStationDestination = keyOfStationDestination;
@@ -55,6 +61,7 @@ public class Route {
         this.numberOrder = numberOrder;
         this.cargo = cargo;
         this.wagonType = wagonType;
+        this.deliveryPeriodMap = deliveryPeriodMap;
     }
 
     public String getKeyOfStationDeparture() {
@@ -153,6 +160,14 @@ public class Route {
         this.wagonType = wagonType;
     }
 
+    public Map<Integer, List<DeliveryPeriod>> getDeliveryPeriodMap() {
+        return deliveryPeriodMap;
+    }
+
+    public void setDeliveryPeriodMap(Map<Integer, List<DeliveryPeriod>> deliveryPeriodMap) {
+        this.deliveryPeriodMap = deliveryPeriodMap;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -169,13 +184,14 @@ public class Route {
                 Objects.equals(volumePeriod, route.volumePeriod) &&
                 Objects.equals(numberOrder, route.numberOrder) &&
                 Objects.equals(cargo, route.cargo) &&
-                Objects.equals(wagonType, route.wagonType);
+                Objects.equals(wagonType, route.wagonType) &&
+                Objects.equals(deliveryPeriodMap, route.deliveryPeriodMap);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(keyOfStationDeparture, nameOfStationDeparture, keyOfStationDestination, nameOfStationDestination, distanceOfWay, VIP, customer, countOrders, volumePeriod, numberOrder, cargo, wagonType);
+        return Objects.hash(keyOfStationDeparture, nameOfStationDeparture, keyOfStationDestination, nameOfStationDestination, distanceOfWay, VIP, customer, countOrders, volumePeriod, numberOrder, cargo, wagonType, deliveryPeriodMap);
     }
 
     @Override
@@ -191,6 +207,7 @@ public class Route {
                 ", " + countOrders +
                 ", " + wagonType +
                 ", " + cargo +
-                ", " + volumePeriod;
+                ", " + volumePeriod +
+                ", " + deliveryPeriodMap;
     }
 }

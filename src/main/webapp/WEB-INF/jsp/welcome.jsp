@@ -189,6 +189,7 @@
                         <th>Порожнее расстояние</th>
                         <th>Оборот дней</th>
                         <th>Из под груза</th>
+                        <th>Период подачи</th>
                     </tr>
                     <br><br>
                      <c:if test="${!empty reportListOfDistributedRoutesAndWagons}">
@@ -202,6 +203,7 @@
                                         <td style="background: #364274; color: #ffffff;">${reportList.getDistanceEmpty()}</td>
                                         <td style="background: #364274; color: #ffffff;">${reportList.getCountCircleDays()}</td>
                                         <td style="background: #364274; color: #ffffff;">${reportList.getCargo()}</td>
+                                        <td style="background: #364274; color: #ffffff;">${reportList.getDeliveryPeriodToString()}</td>
                                     </c:when>
                                     <c:otherwise>
                                         <td style="background: #ffffff; color: #364274;">${reportList.getNumberOfWagon()}</td>
@@ -210,6 +212,7 @@
                                         <td style="background: #ffffff; color: #364274;">${reportList.getDistanceEmpty()}</td>
                                         <td style="background: #ffffff; color: #364274;">${reportList.getCountCircleDays()}</td>
                                         <td style="background: #ffffff; color: #364274;">${reportList.getCargo()}</td>
+                                        <td style="background: #ffffff; color: #364274;">${reportList.getDeliveryPeriodToString()}</td>
                                     </c:otherwise>
                                 </c:choose>
                             </tr>

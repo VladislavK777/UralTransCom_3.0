@@ -23,7 +23,7 @@ import java.util.List;
  * Класс получения списка вагонов
  *
  * @author Vladislav Klochkov
- * @version 4.2
+ * @version 4.3
  * @create 25.10.2017
  *
  * 06.11.2017
@@ -40,6 +40,8 @@ import java.util.List;
  *   1. Версия 4.1
  * 03.05.2018
  *   1. Версия 4.2
+ * 07.05.2018
+ *   1. Версия 4.3
  *
  */
 
@@ -89,6 +91,7 @@ public class GetListOfWagonsImpl implements GetList {
                 int volume = 0;
                 String cargo = null;
                 String keyItemCargo = null;
+                int distanceToStationDestination = 0;
 
                 for (int c = 0; c < row.getLastCellNum(); c++) {
                     if (row.getCell(c).getStringCellValue().trim().equals("Номер вагона")) {
@@ -115,8 +118,12 @@ public class GetListOfWagonsImpl implements GetList {
                         XSSFRow xssfRow = sheet.getRow(j);
                         keyItemCargo = xssfRow.getCell(c).getStringCellValue();
                     }
+                    if (row.getCell(c).getStringCellValue().trim().equals("Расст.")) {
+                        XSSFRow xssfRow = sheet.getRow(j);
+                        distanceToStationDestination = (int) xssfRow.getCell(c).getNumericCellValue();
+                    }
                 }
-                listOfWagons.add(new Wagon(numberOfWagon, keyOfStationDestination, nameOfStationDestination, volume, cargo, keyItemCargo));
+                listOfWagons.add(new Wagon(distanceToStationDestination, numberOfWagon, keyOfStationDestination, nameOfStationDestination, volume, cargo, keyItemCargo));
             }
             logger.debug("Body wagon: {}", listOfWagons);
         } catch (IOException e) {

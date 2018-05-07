@@ -5,7 +5,7 @@ package com.uraltranscom.service.impl;
  * Класс получения списка маршрутов
  *
  * @author Vladislav Klochkov
- * @version 4.2
+ * @version 4.3
  * @create 25.10.2017
  *
  * 17.11.2017
@@ -18,10 +18,13 @@ package com.uraltranscom.service.impl;
  *   1. Версия 4.1
  * 24.04.2018
  *   1. Версия 4.2
+ * 07.05.2018
+ *   1. Версия 4.3
  *
  */
 
 import com.uraltranscom.model.Route;
+import com.uraltranscom.model.additional_model.DeliveryPeriod;
 import com.uraltranscom.model.additional_model.VolumePeriod;
 import com.uraltranscom.model.additional_model.WagonType;
 import com.uraltranscom.service.GetList;
@@ -37,7 +40,11 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -87,6 +94,7 @@ public class GetListOfRoutesImpl extends JavaHelperBase implements GetList {
                 String numberOrder = null;
                 String cargo = null;
                 String wagonType = null;
+                String deliveryPeriod = null;
 
                 for (int c = 1; c < row.getLastCellNum(); c++) {
                     if (row.getCell(c).getStringCellValue().trim().equals("Код ЕСР ст. отправления")) {
@@ -145,9 +153,13 @@ public class GetListOfRoutesImpl extends JavaHelperBase implements GetList {
                         XSSFRow xssfRow = sheet.getRow(j);
                         cargo = xssfRow.getCell(c).getStringCellValue();
                     }
+                    if (row.getCell(c).getStringCellValue().trim().equals("Период подачи")) {
+                        XSSFRow xssfRow = sheet.getRow(j);
+                        deliveryPeriod = xssfRow.getCell(c).getStringCellValue();
+                    }
                 }
                 if (wagonType.equals(TYPE_OF_WAGON_KR)) {
-                    mapOfRoutes.put(i, new Route(keyOfStationDeparture, nameOfStationDeparture, keyOfStationDestination, nameOfStationDestination, distanceOfWay, customer, countOrders, new VolumePeriod(volumeFrom, volumeTo), numberOrder, cargo, new WagonType(wagonType)));
+                    mapOfRoutes.put(i, new Route(keyOfStationDeparture, nameOfStationDeparture, keyOfStationDestination, nameOfStationDestination, distanceOfWay, customer, countOrders, new VolumePeriod(volumeFrom, volumeTo), numberOrder, cargo, new WagonType(wagonType), fillDeliveryPeriod(deliveryPeriod)));
                     i++;
                 }
             }
@@ -157,6 +169,25 @@ public class GetListOfRoutesImpl extends JavaHelperBase implements GetList {
         } catch (OLE2NotOfficeXmlFileException e1) {
             logger.error("Некорректный формат файла, необходим формат xlsx");
         }
+    }
+
+    private Map<Integer, List<DeliveryPeriod>> fillDeliveryPeriod(String deliveryPeriod) {
+        Map<Integer, List<DeliveryPeriod>> map = new HashMap<>();
+        int i = 0;
+        SimpleDateFormat format = new SimpleDateFormat(FORMAT_DATE);
+        String [] var = deliveryPeriod.split(";");
+        for (String var2 : var) {
+            String [] var3 = var2.split(",");
+            try {
+                List<DeliveryPeriod> list = new ArrayList<>();
+                list.add(new DeliveryPeriod(format.parse(var3[0]), format.parse(var3[1]), Integer.parseInt(var3[2])));
+                map.put(i, list);
+            } catch (ParseException e) {
+                logger.error("Ошибка преобразование даты");
+            }
+            i++;
+        }
+        return map;
     }
 
     public Map<Integer, Route> getMapOfRoutes() {

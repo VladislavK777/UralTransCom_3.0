@@ -5,11 +5,13 @@ package com.uraltranscom.service.additional;
  * Класс-помощник содержит основные константы
  *
  * @author Vladislav Klochkov
- * @version 4.0
+ * @version 4.3
  * @create 25.03.2018
  *
  * 25.03.2018
  *   1. Версия 4.0
+ * 07.05.2018
+ *   1. Версия 4.3
  *
  */
 
@@ -25,6 +27,9 @@ public class JavaHelperBase {
     // Типы вагонов
     public static final String TYPE_OF_WAGON_KR = "КР";
     public static final String TYPE_OF_WAGON_PV = "ПВ";
+
+    // Средней показатель километража в сутках
+    public static final float KILOMETERS_IN_DAY = 300f;
 
     // Константы для класса преобразования префикла "дней"
     public static final String PREFIX_ONE_DAY = "день";
@@ -43,5 +48,8 @@ public class JavaHelperBase {
     public static final int RUS_RUS = 0; // Внутри России
     public static final int CIS_CIS = 1; // Внутри СНГ
     public static final int RUS_CIS_RUS = 2; // Между Россией_СНГ_Россией
+
+    // Формат даты
+    public static final String FORMAT_DATE = "dd.MM.yyyy";
 
 }

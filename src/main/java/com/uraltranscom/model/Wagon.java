@@ -1,10 +1,12 @@
 package com.uraltranscom.model;
 
+import com.uraltranscom.model.additional_model.NumberDaysToStationDestinationOfWagon;
 import com.uraltranscom.model.additional_model.WagonType;
-import com.uraltranscom.service.additional.JavaHelperBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -12,7 +14,7 @@ import java.util.Objects;
  * Класс Вагон
  *
  * @author Vladislav Klochkov
- * @version 4.1
+ * @version 4.3
  * @create 17.11.2017
  *
  * 12.01.2018
@@ -21,10 +23,14 @@ import java.util.Objects;
  *   1. Версия 4.0
  * 19.04.2018
  *   1. Версия 4.1
+ * 03.05.2018
+ *   1. Версия 4.2
+ * 07.05.2018
+ *   1. Версия 4.3
  *
  */
 
-public class Wagon extends JavaHelperBase {
+public class Wagon extends NumberDaysToStationDestinationOfWagon {
     // Подключаем логгер
     private static Logger logger = LoggerFactory.getLogger(Wagon.class);
 
@@ -35,8 +41,10 @@ public class Wagon extends JavaHelperBase {
     private int volume; // Объем вагона
     private String cargo; // Груз
     private String keyItemCargo; // Код груза
+    private List<Integer> listNotRoute = new ArrayList<>(); // Неподходящие маршруты для вагона
 
-    public Wagon(String numberOfWagon, String keyOfStationDestination, String nameOfStationDestination, int volume, String cargo, String keyItemCargo) {
+    public Wagon(int distanceToStationDestination, String numberOfWagon, String keyOfStationDestination, String nameOfStationDestination, int volume, String cargo, String keyItemCargo) {
+        super(distanceToStationDestination);
         this.numberOfWagon = numberOfWagon;
         this.wagonType = new WagonType(TYPE_OF_WAGON_KR);
         this.keyOfStationDestination = keyOfStationDestination;
@@ -102,10 +110,19 @@ public class Wagon extends JavaHelperBase {
         this.keyItemCargo = keyItemCargo;
     }
 
+    public List<Integer> getListNotRoute() {
+        return listNotRoute;
+    }
+
+    public void setListNotRoute(List<Integer> listNotRoute) {
+        this.listNotRoute = listNotRoute;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         Wagon wagon = (Wagon) o;
         return volume == wagon.volume &&
                 Objects.equals(numberOfWagon, wagon.numberOfWagon) &&
@@ -113,13 +130,14 @@ public class Wagon extends JavaHelperBase {
                 Objects.equals(keyOfStationDestination, wagon.keyOfStationDestination) &&
                 Objects.equals(nameOfStationDestination, wagon.nameOfStationDestination) &&
                 Objects.equals(cargo, wagon.cargo) &&
-                Objects.equals(keyItemCargo, wagon.keyItemCargo);
+                Objects.equals(keyItemCargo, wagon.keyItemCargo) &&
+                Objects.equals(listNotRoute, wagon.listNotRoute);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(numberOfWagon, wagonType, keyOfStationDestination, nameOfStationDestination, volume, cargo, keyItemCargo);
+        return Objects.hash(super.hashCode(), numberOfWagon, wagonType, keyOfStationDestination, nameOfStationDestination, volume, cargo, keyItemCargo, listNotRoute);
     }
 
     @Override
@@ -130,6 +148,9 @@ public class Wagon extends JavaHelperBase {
                 ", " + nameOfStationDestination +
                 ", " + volume +
                 ", " + cargo +
-                ", " + keyItemCargo;
+                ", " + keyItemCargo +
+                ", " + getDistanceToStationDestination() +
+                ", " + getNumberDaysToStationDestination() +
+                ", " + listNotRoute;
     }
 }
