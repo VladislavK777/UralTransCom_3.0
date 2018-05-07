@@ -205,6 +205,15 @@
                                         <td style="background: #364274; color: #ffffff;">${reportList.getCargo()}</td>
                                         <td style="background: #364274; color: #ffffff;">${reportList.getDeliveryPeriodToString()}</td>
                                     </c:when>
+                                    <c:when test="${reportList.getCountCircleDays() > 30}">
+                                        <td style="background: #ff0000; color: #ffffff;">${reportList.getNumberOfWagon()}</td>
+                                        <td style="background: #ff0000; color: #ffffff;">${reportList.getNameOfStationDepartureOfWagon()}</td>
+                                        <td style="background: #ff0000; color: #ffffff;">${reportList.getRoute()}</td>
+                                        <td style="background: #ff0000; color: #ffffff;">${reportList.getDistanceEmpty()}</td>
+                                        <td style="background: #ff0000; color: #ffffff;">${reportList.getCountCircleDays()}</td>
+                                        <td style="background: #ff0000; color: #ffffff;">${reportList.getCargo()}</td>
+                                        <td style="background: #ff0000; color: #ffffff;">${reportList.getDeliveryPeriodToString()}</td>
+                                    </c:when>
                                     <c:otherwise>
                                         <td style="background: #ffffff; color: #364274;">${reportList.getNumberOfWagon()}</td>
                                         <td style="background: #ffffff; color: #364274;">${reportList.getNameOfStationDepartureOfWagon()}</td>
