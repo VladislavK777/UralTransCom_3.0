@@ -36,7 +36,7 @@
         <property name="password" value="#{decodedPassword}"/>
     </bean>
 
-    <bean id="dataSourceInit" class="com.uraltranscom.util.ConnectionDB">
+    <bean class="com.uraltranscom.util.ConnectionDB">
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
