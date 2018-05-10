@@ -169,7 +169,7 @@
                             <p>Файл дислокации вагонов</p>
                             <input type="file" name="wagons" multiple accept="xlsx">
                             <p>
-                                <input type="submit" value="Start" class="bot2">
+                                <input type="submit" value="Загрузить" class="bot1">
                             </p>
                         </form>
                     </div>
