@@ -33,7 +33,7 @@ public class MultipartFileToFile {
 
     public static File multipartToFile(MultipartFile multipart) {
         try {
-            convertToFile = new File(multipart.getOriginalFilename());
+            convertToFile = new File(System.getProperty("java.io.tmpdir"), multipart.getOriginalFilename());
             convertToFile.createNewFile();
             try(FileOutputStream fileOutputStream = new FileOutputStream(convertToFile)) {
                 fileOutputStream.write(multipart.getBytes());
