@@ -140,12 +140,19 @@
 <br><br><br><br><br>
 
 <div>
-    <input type="button" value="Создать отчет" onclick="showPopup()"
-           class="bot1">
+    <c:if test="${empty reportListOfDistributedRoutesAndWagons}">
+        <input type="button" value="Создать отчет" onclick="showPopup()" class="bot1" style="visibility:visible">
+    </c:if>
+
     <form action="/uraltranscom" method="get">
-        <input type="submit" value="Очистить форму"
-               class="bot1">
+        <input type="submit" value="Очистить форму" class="bot1">
     </form>
+
+    <c:if test="${!empty reportListOfDistributedRoutesAndWagons}">
+        <form action="export" method="post" style="visibility:visible">
+            <input type="submit" value="Скачать отчет" class="bot1">
+        </form>
+    </c:if>
 
     <table class="table_report">
         <tr>
@@ -189,9 +196,9 @@
                         <th>Порожнее расстояние</th>
                         <th>Оборот дней</th>
                         <th>Из под груза</th>
+                        <th>Класс груза</th>
                         <th>Период подачи</th>
                     </tr>
-                    <br><br>
                      <c:if test="${!empty reportListOfDistributedRoutesAndWagons}">
                          <c:forEach items="${reportListOfDistributedRoutesAndWagons}" var="reportList">
                             <tr>
@@ -203,6 +210,7 @@
                                         <td style="background: #364274; color: #ffffff;">${reportList.getDistanceEmpty()}</td>
                                         <td style="background: #364274; color: #ffffff;">${reportList.getCountCircleDays()}</td>
                                         <td style="background: #364274; color: #ffffff;">${reportList.getCargo()}</td>
+                                        <td style="background: #364274; color: #ffffff;">${reportList.getCargoType()}</td>
                                         <td style="background: #364274; color: #ffffff;">${reportList.getDeliveryPeriodToString()}</td>
                                     </c:when>
                                     <c:when test="${reportList.getCountCircleDays() > 30}">
@@ -212,6 +220,7 @@
                                         <td style="background: #ff0000; color: #ffffff;">${reportList.getDistanceEmpty()}</td>
                                         <td style="background: #ff0000; color: #ffffff;">${reportList.getCountCircleDays()}</td>
                                         <td style="background: #ff0000; color: #ffffff;">${reportList.getCargo()}</td>
+                                        <td style="background: #ff0000; color: #ffffff;">${reportList.getCargoType()}</td>
                                         <td style="background: #ffffff; color: #364274;">${reportList.getDeliveryPeriodToString()}</td>
                                     </c:when>
                                     <c:otherwise>
@@ -221,6 +230,7 @@
                                         <td style="background: #ffffff; color: #364274;">${reportList.getDistanceEmpty()}</td>
                                         <td style="background: #ffffff; color: #364274;">${reportList.getCountCircleDays()}</td>
                                         <td style="background: #ffffff; color: #364274;">${reportList.getCargo()}</td>
+                                        <td style="background: #ffffff; color: #364274;">${reportList.getCargoType()}</td>
                                         <td style="background: #ffffff; color: #364274;">${reportList.getDeliveryPeriodToString()}</td>
                                     </c:otherwise>
                                 </c:choose>
@@ -246,9 +256,6 @@
         </div>
     </div>
     <br>
-    <form action="export" method="post">
-        <input type="submit" value="Скачать отчет" id="download" class="bot1">
-    </form>
 </div>
 
 <br><br><br>

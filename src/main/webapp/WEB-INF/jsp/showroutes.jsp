@@ -117,6 +117,7 @@
 <br><br><br><br><br>
 
 <form method="post" action="reports">
+    <input type="submit" value="Запустить распределение" class="bot1" id="startProcess" onclick="lockScreen();">
     <div>
         <table class="table_report">
             <tr>
@@ -143,9 +144,6 @@
                 </c:forEach>
             </c:if>
         </table>
-        <p>
-            <input type="submit" value="Start" class="bot2" id="startProcess" onclick="lockScreen();">
-        </p>
     </div>
 </form>
 

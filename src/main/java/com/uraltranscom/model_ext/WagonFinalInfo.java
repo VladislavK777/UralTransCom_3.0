@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
-import java.util.Objects;
 
 /**
  *
@@ -33,6 +32,7 @@ public class WagonFinalInfo extends JavaHelperBase {
     private String nameOfStationDepartureOfWagon; // Станция, куда едет вагон порожний
     private String route; // Маршрут
     private String cargo; // Груз
+    private int cargoType; // Класс груза
     private DeliveryPeriod deliveryPeriod; // Период подачи вагона
     private String deliveryPeriodToString; // Период подачи для веб-морды
 
@@ -45,7 +45,7 @@ public class WagonFinalInfo extends JavaHelperBase {
     }
 
     // Для отображения в веб-морде
-    public WagonFinalInfo(String numberOfWagon, int countCircleDays, int distanceEmpty, String nameOfStationDepartureOfWagon, String route, String cargo, DeliveryPeriod deliveryPeriod) {
+    public WagonFinalInfo(String numberOfWagon, int countCircleDays, int distanceEmpty, String nameOfStationDepartureOfWagon, String route, String cargo, int cargoType, DeliveryPeriod deliveryPeriod) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(FORMAT_DATE);
         this.numberOfWagon = numberOfWagon;
         this.countCircleDays = countCircleDays;
@@ -53,6 +53,7 @@ public class WagonFinalInfo extends JavaHelperBase {
         this.nameOfStationDepartureOfWagon = nameOfStationDepartureOfWagon;
         this.route = route;
         this.cargo = cargo;
+        this.cargoType = cargoType;
         this.deliveryPeriodToString = simpleDateFormat.format(deliveryPeriod.getPeriodFrom()) + "-" + simpleDateFormat.format(deliveryPeriod.getPeriodTo());
     }
 
@@ -120,35 +121,11 @@ public class WagonFinalInfo extends JavaHelperBase {
         this.deliveryPeriodToString = deliveryPeriodToString;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        WagonFinalInfo that = (WagonFinalInfo) o;
-        return countCircleDays == that.countCircleDays &&
-                distanceEmpty == that.distanceEmpty &&
-                Objects.equals(numberOfWagon, that.numberOfWagon) &&
-                Objects.equals(nameOfStationDepartureOfWagon, that.nameOfStationDepartureOfWagon) &&
-                Objects.equals(route, that.route) &&
-                Objects.equals(cargo, that.cargo) &&
-                Objects.equals(deliveryPeriod, that.deliveryPeriod) &&
-                Objects.equals(deliveryPeriodToString, that.deliveryPeriodToString);
+    public int getCargoType() {
+        return cargoType;
     }
 
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(numberOfWagon, countCircleDays, distanceEmpty, nameOfStationDepartureOfWagon, route, cargo, deliveryPeriod, deliveryPeriodToString);
-    }
-
-    @Override
-    public String toString() {
-        return  numberOfWagon +
-                ", " + nameOfStationDepartureOfWagon +
-                ", " + route +
-                ", " + countCircleDays +
-                ", " + distanceEmpty +
-                ", " + cargo +
-                ", " + deliveryPeriodToString;
+    public void setCargoType(int cargoType) {
+        this.cargoType = cargoType;
     }
 }
