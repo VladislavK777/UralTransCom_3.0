@@ -118,7 +118,7 @@ public class GetListOfWagonsImpl implements GetList {
                         XSSFRow xssfRow = sheet.getRow(j);
                         keyItemCargo = xssfRow.getCell(c).getStringCellValue();
                     }
-                    if (row.getCell(c).getStringCellValue().trim().equals("Расст.")) {
+                    if (row.getCell(c).getStringCellValue().trim().equals("Расстояние осталось (от текущей станции)")) {
                         XSSFRow xssfRow = sheet.getRow(j);
                         distanceToStationDestination = (int) xssfRow.getCell(c).getNumericCellValue();
                     }

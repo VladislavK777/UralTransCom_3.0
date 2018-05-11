@@ -153,7 +153,7 @@ public class GetListOfRoutesImpl extends JavaHelperBase implements GetList {
                         XSSFRow xssfRow = sheet.getRow(j);
                         cargo = xssfRow.getCell(c).getStringCellValue();
                     }
-                    if (row.getCell(c).getStringCellValue().trim().equals("Период подачи")) {
+                    if (row.getCell(c).getStringCellValue().trim().equals("График")) {
                         XSSFRow xssfRow = sheet.getRow(j);
                         deliveryPeriod = xssfRow.getCell(c).getStringCellValue();
                     }
