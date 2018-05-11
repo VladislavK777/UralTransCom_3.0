@@ -125,8 +125,7 @@
 
 .table_report {
     background: white;
-    max-width: 70%;
-    width: 70%;
+    width: 100%;
     border-collapse: collapse;
     text-align: left;
 }

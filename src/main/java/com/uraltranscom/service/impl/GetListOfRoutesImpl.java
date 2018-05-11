@@ -171,11 +171,15 @@ public class GetListOfRoutesImpl extends JavaHelperBase implements GetList {
         }
     }
 
+    private String prepareStringForDate(String string) {
+        return string.replaceAll("\\p{Cntrl}", "");
+    }
+
     private Map<Integer, List<DeliveryPeriod>> fillDeliveryPeriod(String deliveryPeriod) {
         Map<Integer, List<DeliveryPeriod>> map = new HashMap<>();
         int i = 0;
         SimpleDateFormat format = new SimpleDateFormat(FORMAT_DATE);
-        String [] var = deliveryPeriod.split(";");
+        String [] var = prepareStringForDate(deliveryPeriod).split(";");
         for (String var2 : var) {
             String [] var3 = var2.split(",");
             try {
@@ -183,7 +187,7 @@ public class GetListOfRoutesImpl extends JavaHelperBase implements GetList {
                 list.add(new DeliveryPeriod(format.parse(var3[0]), format.parse(var3[1]), Integer.parseInt(var3[2])));
                 map.put(i, list);
             } catch (ParseException e) {
-                logger.error("Ошибка преобразование даты");
+                logger.error("Ошибка преобразование даты: {} - {}", deliveryPeriod, e.getMessage());
             }
             i++;
         }

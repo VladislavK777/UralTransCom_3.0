@@ -116,6 +116,10 @@
 
 <br><br><br><br><br>
 
+<form action="/uraltranscom" method="get">
+    <input type="submit" value="Очистить форму" class="bot1">
+</form>
+
 <form method="post" action="reports">
     <input type="submit" value="Запустить распределение" class="bot1" id="startProcess" onclick="lockScreen();">
     <div>
@@ -125,9 +129,9 @@
                 <th>Станция отправления</th>
                 <th>Станция назначения</th>
                 <th>Контрагент</th>
-                <th>Кол. вагонов</th>
-                <th>Расстояние, км</th>
-                <th>Приоритет</th>
+                <th>Кол.вагонов</th>
+                <th>Расстояние</th>
+                <!-- <th>Приоритет</th> -->
             </tr>
             <br><br>
             <c:if test="${!empty listRoute}">
@@ -139,7 +143,7 @@
                         <td style="background: #ffffff; color: #364274;">${list.value.getCustomer()}</td>
                         <td style="background: #ffffff; color: #364274;">${list.value.getCountOrders()}</td>
                         <td style="background: #ffffff; color: #364274;">${list.value.getDistanceOfWay()}</td>
-                        <td style="background: #ffffff; color: #364274;"><input type="checkbox" name="routeId" value="${list.key}" /></td>
+                        <!-- <td style="background: #ffffff; color: #364274;"><input type="checkbox" name="routeId" value="${list.key}" /></td> -->
                     </tr>
                 </c:forEach>
             </c:if>
