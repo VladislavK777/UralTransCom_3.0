@@ -126,7 +126,7 @@ public class GetListOfRoutesImpl extends JavaHelperBase implements GetList {
                         XSSFRow xssfRow = sheet.getRow(j);
                         customer = xssfRow.getCell(c).getStringCellValue();
                     }
-                    if (row.getCell(c).getStringCellValue().trim().equals("Кол. вагонов")) {
+                    if (row.getCell(c).getStringCellValue().trim().equals("Кол-во ПС")) {
                         XSSFRow xssfRow = sheet.getRow(j);
                         countOrders = (int) xssfRow.getCell(c).getNumericCellValue();
                         if (countOrders < 0) {
