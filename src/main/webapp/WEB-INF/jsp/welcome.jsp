@@ -131,10 +131,13 @@
 
 <div class="one">
     <h1>сервис распределения вагонов</h1>
+    <div class="train">
+    		<img src="resources/train.jpg">
+    </div>
 </div>
 
 <div>
-    <img style="position: relative; left: 15%;" src="resources/logo.jpg">
+    <img class="logo" src="resources/logo.jpg">
 </div>
 
 <br><br><br><br><br>
