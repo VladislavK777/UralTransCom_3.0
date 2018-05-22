@@ -129,7 +129,7 @@ public class GetListOfWagonsImpl implements GetList {
         } catch (IOException e) {
             logger.error("Ошибка загруки файла - {}", e.getMessage());
         } catch (OLE2NotOfficeXmlFileException e1) {
-            logger.error("Некорректный формат файла, необходим формат xlsx");
+            logger.error("Некорректный формат файла заявок, необходим формат xlsx");
         }
 
     }

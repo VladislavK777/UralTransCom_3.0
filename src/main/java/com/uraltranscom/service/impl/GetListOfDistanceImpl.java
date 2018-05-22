@@ -98,15 +98,20 @@ public class GetListOfDistanceImpl extends JavaHelperBase implements GetListOfDi
                         int distance = listDistance.get(0);
                         if (distance == -1) {
                             if (!checkExistKeyOfStationImpl.checkExistKey(stationCode2)) {
-                                basicClassLookingForImpl.getListOfError().add("Проверьте код станции " + entry.getValue().getKeyOfStationDeparture() + " в файле заявок");
-                                logger.error("Проверьте код станции " + entry.getValue().getKeyOfStationDeparture() + " в файле заявок");
+                                basicClassLookingForImpl.getListOfError().add("Проверьте код станции " + stationCode2 + " в файле заявок");
+                                logger.error("Проверьте код станции " + stationCode2 + " в файле заявок");
                                 iterator.remove();
                                 break;
                             }
                             if (!checkExistKeyOfStationImpl.checkExistKey(stationCode1)) {
-                                basicClassLookingForImpl.getListOfError().add("Проверьте код станции " + listOfWagons.get(i).getKeyOfStationDestination() + " в файле дислокации вагонов");
-                                logger.error("Проверьте код станции {}", listOfWagons.get(i).getKeyOfStationDestination() + " в файле дислокации вагонов");
+                                basicClassLookingForImpl.getListOfError().add("Проверьте код станции " + stationCode1 + " в файле дислокации вагонов");
+                                logger.error("Проверьте код станции {}", stationCode1 + " в файле дислокации вагонов");
                                 listOfWagons.remove(i);
+                                break;
+                            }
+                            if (checkExistKeyOfStationImpl.checkExistKey(stationCode2) && checkExistKeyOfStationImpl.checkExistKey(stationCode1)) {
+                                basicClassLookingForImpl.getListOfError().add("Не нашел расстояние между " + stationCode1 + " и " + stationCode2);
+                                logger.error("Не нашел расстояние между " + stationCode1 + " и " + stationCode2);
                                 break;
                             }
                         } else {

@@ -35,7 +35,7 @@ public class FillMapsNotVipAndVip {
 
     public void separateMaps(Map<Integer, Route> map) throws NullPointerException {
         if (map.isEmpty()) {
-            throw new NullPointerException("Map must not empty");
+            throw new NullPointerException("Не был загружен файл заявок");
         }
         for (Map.Entry<Integer, Route> maps : map.entrySet()) {
             if (maps.getValue().getVIP().equals("1")) {
