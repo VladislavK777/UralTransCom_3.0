@@ -5,7 +5,7 @@
 
 <html>
 <head>
-    <title>UralTransCom</title>
+    <title>UralTransCom|DistributionPark</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link href="resources/style.css" rel="stylesheet" type="text/css"/>
     <link rel="shortcut icon" href="resources/favicon.ico" type="image/x-icon">
@@ -52,9 +52,6 @@
     </script>
 
     <style>
-        body {
-            font: 14px/1 "Open Sans", sans-serif;
-        }
         .stop-scrolling {
             height: 100%;
             overflow: hidden;
@@ -107,9 +104,9 @@
 </div>
 
 <div class="one">
-    <h1>сервис распределения вагонов</h1>
+    <h1>СЕРВИС РАСПРЕДЕЛЕНИЯ ВАГОНОВ</h1>
     <div class="train">
-    		<img src="resources/train.jpg">
+    		<img class="image" src="resources/train.jpg">
     </div>
 </div>
 
@@ -119,7 +116,7 @@
 
 <br><br><br><br><br>
 
-<form action="/uraltranscom" method="get">
+<form action="/distributionpark" method="get">
     <input type="submit" value="Очистить форму" class="bot1">
 </form>
 
@@ -155,7 +152,7 @@
 
 <br><br><br>
 
-<div align="center" id="footer">
+<div align="center" class="footer">
     Create by Vladislav Klochkov. All rights reserved, <span id="copy"></span>
 </div>
 

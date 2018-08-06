@@ -11,7 +11,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <title>UralTransCom</title>
+    <title>UralTransCom|DistributionPark</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link href="resources/style.css" rel="stylesheet" type="text/css"/>
     <link rel="shortcut icon" href="resources/favicon.ico" type="image/x-icon">
@@ -39,9 +39,6 @@
     </script>
 
     <style>
-        body {
-            font: 14px/1 "Open Sans", sans-serif;
-        }
         /* Настрйка вкладок*/
         /* Стили секций с содержанием */
         .tabs > section {
@@ -105,13 +102,14 @@
             display: block;
         }
         /* Убираем текст с переключателей и оставляем иконки на малых экранах*/
-        @media screen and (max-width: 680px) {
+        @media screen and (max-width: 1500px) {
             .tabs > label {
-                font-size: 0;
+                font-size: 12px;
+                width: 180px;
             }
             .tabs > label:before {
                 margin: 0;
-                font-size: 18px;
+                font-size: 12px;
             }
         }
         /* Изменяем внутренние отступы переключателей для малых экранов */
@@ -130,9 +128,9 @@
 </div>
 
 <div class="one">
-    <h1>сервис распределения вагонов</h1>
+    <h1>СЕРВИС РАСПРЕДЕЛЕНИЯ ВАГОНОВ</h1>
     <div class="train">
-    		<img src="resources/train.jpg">
+    		<img class="image" src="resources/train.jpg">
     </div>
 </div>
 
@@ -141,14 +139,14 @@
 </div>
 
 <br><br><br><br><br>
-
 <div>
     <c:if test="${empty reportListOfDistributedRoutesAndWagons}">
-        <input type="button" value="Создать отчет" onclick="showPopup()" class="bot1" style="visibility:visible">
+        <input type="button" value="Создать процесс" onclick="showPopup()" class="bot1" style="visibility:visible">
+        <br><br>
     </c:if>
 
     <c:if test="${!empty reportListOfDistributedRoutesAndWagons}">
-        <form action="/uraltranscom" method="get" style="visibility:visible">
+        <form action="/distributionpark" method="get" style="visibility:visible">
             <input type="submit" value="Очистить форму" class="bot1">
         </form>
         <form action="export" method="post" style="visibility:visible">
@@ -239,17 +237,15 @@
              </div>
             </section>
             <section id="content-tab2">
-                <p>
-                    <c:if test="${!empty reportListOfError}">
-                <table>
-                    <c:forEach items="${reportListOfError}" var="Error">
-                        <tr>
-                            <td style="background: #ffffff; color: #364274;">${Error}</td>
-                        </tr>
-                    </c:forEach>
-                </table>
+                <c:if test="${!empty reportListOfError}">
+                    <table class="table_report">
+                        <c:forEach items="${reportListOfError}" var="Error">
+                            <tr>
+                                <td style="background: #ffffff; color: #364274;">${Error}</td>
+                            </tr>
+                        </c:forEach>
+                    </table>
                 </c:if>
-                </p>
             </section>
         </div>
     </div>
@@ -258,7 +254,7 @@
 
 <br><br><br>
 
-<div align="center" id="footer">
+<div align="center" class="footer">
     Create by Vladislav Klochkov. All rights reserved, <span id="copy"></span>
 </div>
 

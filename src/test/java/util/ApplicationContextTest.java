@@ -1,6 +1,6 @@
 package util;
 
-import com.uraltranscom.util.ZookeeperSettingHolder;
+import com.uraltranscom.distributionpark.util.ZookeeperSettingHolder;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.junit.Assert;
 import org.junit.Test;
