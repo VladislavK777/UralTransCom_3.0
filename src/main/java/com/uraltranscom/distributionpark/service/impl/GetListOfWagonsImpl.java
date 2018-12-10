@@ -83,7 +83,7 @@ public class GetListOfWagonsImpl implements GetList {
             for (int j = 1; j < sheet.getLastRowNum() + 1; j++) {
                 XSSFRow row = sheet.getRow(0);
 
-                String numberOfWagon = null;
+                int numberOfWagon = 0;
                 String keyOfStationDestination = null;
                 String nameOfStationDestination = null;
                 int volume = 0;
@@ -93,7 +93,7 @@ public class GetListOfWagonsImpl implements GetList {
                 for (int c = 0; c < row.getLastCellNum(); c++) {
                     if (row.getCell(c).getStringCellValue().trim().equals("Номер вагона")) {
                         XSSFRow xssfRow = sheet.getRow(j);
-                        numberOfWagon = xssfRow.getCell(c).getStringCellValue();
+                        numberOfWagon = (int) xssfRow.getCell(c).getNumericCellValue();
                     }
                     if (row.getCell(c).getStringCellValue().trim().equals("Станция назначения")) {
                         XSSFRow xssfRow = sheet.getRow(j);
@@ -116,7 +116,7 @@ public class GetListOfWagonsImpl implements GetList {
                         keyItemCargo = xssfRow.getCell(c).getStringCellValue();
                     }
                 }
-                listOfWagons.add(new Wagon(numberOfWagon, keyOfStationDestination, nameOfStationDestination, volume, cargo, keyItemCargo));
+                listOfWagons.add(new Wagon(String.valueOf(numberOfWagon), keyOfStationDestination, nameOfStationDestination, volume, cargo, keyItemCargo));
             }
             logger.debug("Body wagon: {}", listOfWagons);
         } catch (IOException e) {

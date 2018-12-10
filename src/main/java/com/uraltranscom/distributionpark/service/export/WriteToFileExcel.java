@@ -110,7 +110,7 @@ public class WriteToFileExcel extends JavaHelperBase {
                     for (int c = 0; c < row.getLastCellNum(); c++) {
                         if (row.getCell(c).getStringCellValue().trim().equals("Номер вагона")) {
                             XSSFRow xssfRow = sheet.getRow(j);
-                            String val = xssfRow.getCell(c).getStringCellValue();
+                            String val = String.valueOf((int) xssfRow.getCell(c).getNumericCellValue());
                             for (Map.Entry<WagonFinalInfo, Route> mapForAdd : map.entrySet()) {
                                 if (val.equals(mapForAdd.getKey().getNumberOfWagon())) {
                                     for (int q = 0; q < row.getLastCellNum(); q++) {
