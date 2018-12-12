@@ -138,7 +138,7 @@
     <img class="logo" src="resources/logo.jpg">
 </div>
 
-<br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br>
 <div>
     <c:if test="${empty reportListOfDistributedRoutesAndWagons}">
         <input type="button" value="Создать процесс" onclick="showPopup()" class="bot1" style="visibility:visible">
