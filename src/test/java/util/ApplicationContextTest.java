@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.sql.SQLException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:applicationContext/applicationContext.xml"})
+@ContextConfiguration(locations = {"classpath:applicationContextTest.xml"})
 public class ApplicationContextTest {
 
     @Autowired

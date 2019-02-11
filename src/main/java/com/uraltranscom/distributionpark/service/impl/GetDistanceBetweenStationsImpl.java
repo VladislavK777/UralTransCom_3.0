@@ -56,7 +56,7 @@ public class GetDistanceBetweenStationsImpl extends ConnectionDB implements GetD
     }
 
     private CallableStatement createCallableStatement(Connection connection, String keyOfStationDeparture, String keyOfStationDestination) throws SQLException {
-        CallableStatement callableStatement = connection.prepareCall(" { call getdistancetest(?,?) } ");
+        CallableStatement callableStatement = connection.prepareCall(" { call test_distance.get_root_distance(?,?) } ");
         callableStatement.setString(1, keyOfStationDeparture);
         callableStatement.setString(2, keyOfStationDestination);
         return callableStatement;
