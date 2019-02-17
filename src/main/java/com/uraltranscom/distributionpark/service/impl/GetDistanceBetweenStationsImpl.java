@@ -46,7 +46,7 @@ public class GetDistanceBetweenStationsImpl extends ConnectionDB implements GetD
              CallableStatement callableStatement = createCallableStatement(connection, keyOfStationDeparture, keyOfStationDestination, keyCargo);
              ResultSet resultSet = callableStatement.executeQuery()) {
             while (resultSet.next()) {
-                listResult.add(resultSet.getInt(1));
+                listResult.add(resultSet.getObject(1));
             }
             logger.debug("Get distance for: {}", keyOfStationDeparture + "_" + keyOfStationDestination + ": " + listResult.get(0));
         } catch (SQLException sqlEx) {

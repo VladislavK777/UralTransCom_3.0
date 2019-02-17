@@ -69,7 +69,7 @@ public class GetListOfDistanceImpl extends JavaHelperBase implements GetListOfDi
     }
 
     public void fillRootMapWithDistances(List<Wagon> listWagon, Map<Integer, Route> mapRoutes) {
-        //logger.info("Start method fillRootMapWithDistances");
+        logger.info("Start method fillRootMapWithDistances");
         Iterator<Map.Entry<Integer, Route>> iterator = mapRoutes.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<Integer, Route> entry = iterator.next();
@@ -80,7 +80,7 @@ public class GetListOfDistanceImpl extends JavaHelperBase implements GetListOfDi
                 String keyCargo = listWagon.get(i).getKeyItemCargo();
                 String key = wagonKeyOfStationDestination + "_" + routeKeyOfStationDeparture + "_" + keyCargo;
 
-                if (!wagonKeyOfStationDestination.equals("")) {
+                if (!wagonKeyOfStationDestination.equals("") || !wagonKeyOfStationDestination.equals("000000")) {
                     if (keyCargo.equals("000000")) {
                         List<Object> listDistance = new ArrayList<>();
                         listDistance.add(0);
