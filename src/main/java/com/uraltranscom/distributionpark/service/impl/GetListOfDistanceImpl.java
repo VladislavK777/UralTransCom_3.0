@@ -41,6 +41,8 @@ public class GetListOfDistanceImpl extends JavaHelperBase implements GetListOfDi
     private GetListOfWagonsImpl getListOfWagonsImpl;
     @Autowired
     private ClassHandlerLookingForImpl classHandlerLookingFor;
+    @Autowired
+    private FillMapsNotVipAndVip fillMapsNotVipAndVip;
 
     // Основная мапа
     private Map<String, List<Object>> rootMapWithDistances;
@@ -58,6 +60,12 @@ public class GetListOfDistanceImpl extends JavaHelperBase implements GetListOfDi
         mapOfRoutes = new HashMap<>(getListOfRoutesImpl.getMapOfRoutes());
         listOfWagons = new ArrayList<>(getListOfWagonsImpl.getListOfWagons());
         logger.info("Stop process fill map with distances");
+
+        try {
+            fillMapsNotVipAndVip.separateMaps(mapOfRoutes);
+        } catch (NullPointerException e) {
+            logger.error("Map must not empty");
+        }
     }
 
     public void fillRootMapWithDistances(List<Wagon> listWagon, Map<Integer, Route> mapRoutes) {
