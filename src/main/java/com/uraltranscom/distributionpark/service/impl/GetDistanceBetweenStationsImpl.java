@@ -38,12 +38,12 @@ public class GetDistanceBetweenStationsImpl extends ConnectionDB implements GetD
     }
 
     @Override
-    public List<Integer> getDistanceBetweenStations(String keyOfStationDeparture, String keyOfStationDestination) {
+    public List<Integer> getDistanceBetweenStations(String keyOfStationDeparture, String keyOfStationDestination, String keyCargo) {
 
         List<Integer> listResult = new ArrayList<>();
 
         try (Connection connection = getDataSource().getConnection();
-             CallableStatement callableStatement = createCallableStatement(connection, keyOfStationDeparture, keyOfStationDestination);
+             CallableStatement callableStatement = createCallableStatement(connection, keyOfStationDeparture, keyOfStationDestination, keyCargo);
              ResultSet resultSet = callableStatement.executeQuery()) {
             while (resultSet.next()) {
                 listResult.add(resultSet.getInt(1));
@@ -55,10 +55,11 @@ public class GetDistanceBetweenStationsImpl extends ConnectionDB implements GetD
         return listResult;
     }
 
-    private CallableStatement createCallableStatement(Connection connection, String keyOfStationDeparture, String keyOfStationDestination) throws SQLException {
-        CallableStatement callableStatement = connection.prepareCall(" { call test_distance.get_root_distance(?,?) } ");
+    private CallableStatement createCallableStatement(Connection connection, String keyOfStationDeparture, String keyOfStationDestination, String keyCargo) throws SQLException {
+        CallableStatement callableStatement = connection.prepareCall(" { call  test_distance.get_root_distance2(?,?,?) } ");
         callableStatement.setString(1, keyOfStationDeparture);
         callableStatement.setString(2, keyOfStationDestination);
+        callableStatement.setString(3, keyCargo);
         return callableStatement;
     }
 }

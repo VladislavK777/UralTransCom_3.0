@@ -2,14 +2,14 @@ package com.uraltranscom.distributionpark.service.impl;
 
 import com.uraltranscom.distributionpark.model.Route;
 import com.uraltranscom.distributionpark.model.Wagon;
-import com.uraltranscom.distributionpark.service.ClassHandlerLookingFor;
 import com.uraltranscom.distributionpark.model_ext.WagonFinalInfo;
+import com.uraltranscom.distributionpark.service.ClassHandlerLookingFor;
 import com.uraltranscom.distributionpark.service.additional.CompareMapValue;
 import com.uraltranscom.distributionpark.service.additional.JavaHelperBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
@@ -30,7 +30,7 @@ import java.util.*;
  *
  */
 
-@Service
+@Component
 public class ClassHandlerLookingForImpl extends JavaHelperBase implements ClassHandlerLookingFor {
     // Подключаем логгер
     private static Logger logger = LoggerFactory.getLogger(ClassHandlerLookingForImpl.class);
@@ -85,7 +85,7 @@ public class ClassHandlerLookingForImpl extends JavaHelperBase implements ClassH
                                 switch (getListOfDistance.getRootMapWithTypeOfCargo().get(keyItemCargo)) {
                                     case 3:
                                         if (getListOfDistance.getRootMapWithDistances().get(key).get(0) <= 300) {
-                                            mapDistance.put(list, getListOfDistance.getRootMapWithDistances().get(key).get(0));
+                                             mapDistance.put(list, getListOfDistance.getRootMapWithDistances().get(key).get(0));
                                         }
                                         break;
                                     default:

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -94,7 +95,7 @@ public class GetListOfDistanceImpl extends JavaHelperBase implements GetListOfDi
                 // Заполняем мапы расстояний
                 if (!rootMapWithDistanceMoreMaxDist.containsKey(key)) {
                     if (!rootMapWithDistances.containsKey(key)) {
-                        List<Integer> listDistance = getDistanceBetweenStations.getDistanceBetweenStations(stationCode1, stationCode2);
+                        List<Integer> listDistance = getDistanceBetweenStations.getDistanceBetweenStations(stationCode1, stationCode2, keyItemCargo);
                         int distance = listDistance.get(0);
                         if (distance == -1) {
                             if (!checkExistKeyOfStationImpl.checkExistKey(stationCode2)) {
@@ -136,6 +137,43 @@ public class GetListOfDistanceImpl extends JavaHelperBase implements GetListOfDi
         getListOfWagonsImpl.replaceListOfWagon(listOfWagons);
 
         logger.info("Stop process fill map with distances");
+    }
+
+    void serializeMap(HashMap<String, List<Object>> map) {
+        File file = new File(JavaHelperBase.PATH_SAVE_FILE_MAP);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                logger.info("Файл не сериализации найден и был создан:", e.getMessage());
+            }
+        }
+        try (FileOutputStream fileOutputStream = new FileOutputStream(file);
+             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream))
+        {
+            objectOutputStream.writeObject(map);
+            logger.info("Карты успешно сохранены");
+        } catch (Exception e) {
+            logger.error("IO Exception", e.getMessage());
+        }
+    }
+
+    private Map<String, List<Object>> deSerializeMap() {
+        File file = new File(JavaHelperBase.PATH_SAVE_FILE_MAP);
+        if (!file.exists()) {
+            logger.info("Файл сериализации не найден");
+            return new HashMap<>();
+        }
+        Map<String, List<Object>> map = new HashMap<>();
+        try (FileInputStream fileInputStream = new FileInputStream (file);
+             ObjectInputStream objectInputStream = new ObjectInputStream (fileInputStream))
+        {
+            map = (Map<String, List<Object>>) objectInputStream.readObject();
+            logger.info("Карты успешно загружены");
+        } catch (Exception e) {
+            logger.error("IO Exception", e.getMessage());
+        }
+        return map;
     }
 
     public Map<String, List<Integer>> getRootMapWithDistances() {
