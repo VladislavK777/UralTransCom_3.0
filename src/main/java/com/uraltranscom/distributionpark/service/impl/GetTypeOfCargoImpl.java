@@ -51,7 +51,7 @@ public class GetTypeOfCargoImpl extends ConnectionDB implements GetTypeOfCargo {
     }
 
     private CallableStatement createCallableStatement(Connection connection, String key) throws SQLException {
-        CallableStatement callableStatement = connection.prepareCall(" { call getclassofcargo(?) } ");
+        CallableStatement callableStatement = connection.prepareCall(" { call public.getclassofcargo(?) } ");
         callableStatement.setString(1, key);
         return callableStatement;
     }

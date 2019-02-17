@@ -55,7 +55,7 @@ public class CheckExistKeyOfStationImpl extends ConnectionDB implements CheckExi
     }
 
     private PreparedStatement createPreparedStatement(Connection connection, String keyOfStation) throws SQLException {
-        String sql = "select distinct 1 from distances_new where (station_id1 = ? or station_id2 = ?)";
+        String sql = String.format("select distinct 1 from public.distances_new where (station_id1 = ? or station_id2 = ?)");
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, keyOfStation);
         preparedStatement.setString(2, keyOfStation);
