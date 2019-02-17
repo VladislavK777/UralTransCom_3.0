@@ -23,6 +23,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface GetDistanceBetweenStations {
-    List<Integer> getDistanceBetweenStations(String keyOfStationDeparture, String keyOfStationDestination, String keyCargo) throws SQLException;
+    List<Object> getDistanceBetweenStations(String keyOfStationDeparture, String keyOfStationDestination, String keyCargo) throws SQLException;
 
 }

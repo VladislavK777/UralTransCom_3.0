@@ -40,103 +40,66 @@ public class GetListOfDistanceImpl extends JavaHelperBase implements GetListOfDi
     @Autowired
     private GetListOfWagonsImpl getListOfWagonsImpl;
     @Autowired
-    private CheckExistKeyOfStationImpl checkExistKeyOfStationImpl;
-    @Autowired
-    private BasicClassLookingForImpl basicClassLookingForImpl;
-    @Autowired
-    private FillMapsNotVipAndVip fillMapsNotVipAndVip;
-    @Autowired
-    private GetTypeOfCargoImpl getTypeOfCargo;
+    private ClassHandlerLookingForImpl classHandlerLookingFor;
 
     // Основная мапа
-    private Map<String, List<Integer>> rootMapWithDistances = new HashMap<>();
+    private Map<String, List<Object>> rootMapWithDistances;
 
-    // Мапа с расстояниями больше максимального значения
-    private Map<String, List<Integer>> rootMapWithDistanceMoreMaxDist = new HashMap<>();
+    private Map<Integer, Route> mapOfRoutes;
+    private List<Wagon> listOfWagons;
 
     // Мапа хранит классы грузов
     private Map<String, Integer> rootMapWithTypeOfCargo = new HashMap<>();
 
     @Override
-    public void fillMap(String routeId) {
+    public void fillMap() {
         logger.info("Start process fill map with distances");
+        rootMapWithDistances = deSerializeMap();
+        mapOfRoutes = new HashMap<>(getListOfRoutesImpl.getMapOfRoutes());
+        listOfWagons = new ArrayList<>(getListOfWagonsImpl.getListOfWagons());
+        logger.info("Stop process fill map with distances");
+    }
 
-        Map<Integer, Route> mapOfRoutes = new HashMap<>(getListOfRoutesImpl.getMapOfRoutes());
-        List<Wagon> listOfWagons = new ArrayList<>(getListOfWagonsImpl.getListOfWagons());
-
-        if (!routeId.isEmpty()) {
-            String[] routesId = routeId.split(",");
-            for (Map.Entry<Integer, Route> _mapOfRoutes : mapOfRoutes.entrySet()) {
-                for (String _routesId : routesId) {
-                    if (_mapOfRoutes.getKey() == Integer.parseInt(_routesId)) {
-                        mapOfRoutes.get(Integer.parseInt(_routesId)).setVIP("1");
-                    }
-                }
-            }
-        }
-
-        Iterator<Map.Entry<Integer, Route>> iterator = mapOfRoutes.entrySet().iterator();
+    public void fillRootMapWithDistances(List<Wagon> listWagon, Map<Integer, Route> mapRoutes) {
+        //logger.info("Start method fillRootMapWithDistances");
+        Iterator<Map.Entry<Integer, Route>> iterator = mapRoutes.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<Integer, Route> entry = iterator.next();
-            for (int i = 0; i < listOfWagons.size(); i++) {
+            for (int i = 0; i < listWagon.size(); i++) {
 
-                String stationCode1 = listOfWagons.get(i).getKeyOfStationDestination();
-                String stationCode2 = entry.getValue().getKeyOfStationDeparture();
-                String keyItemCargo = listOfWagons.get(i).getKeyItemCargo();
+                String wagonKeyOfStationDestination = listWagon.get(i).getKeyOfStationDestination();
+                String routeKeyOfStationDeparture = entry.getValue().getKeyOfStationDeparture();
+                String keyCargo = listWagon.get(i).getKeyItemCargo();
+                String key = wagonKeyOfStationDestination + "_" + routeKeyOfStationDeparture + "_" + keyCargo;
 
-                String key = stationCode1 + "_" + stationCode2;
-
-                // Заполняем мапу классами
-                if (!rootMapWithTypeOfCargo.containsKey(keyItemCargo)) {
-                    int type = getTypeOfCargo.getTypeOfCargo(keyItemCargo);
-                    rootMapWithTypeOfCargo.put(keyItemCargo, type);
-                }
-
-                // Заполняем мапы расстояний
-                if (!rootMapWithDistanceMoreMaxDist.containsKey(key)) {
-                    if (!rootMapWithDistances.containsKey(key)) {
-                        List<Integer> listDistance = getDistanceBetweenStations.getDistanceBetweenStations(stationCode1, stationCode2, keyItemCargo);
-                        int distance = listDistance.get(0);
-                        if (distance == -1) {
-                            if (!checkExistKeyOfStationImpl.checkExistKey(stationCode2)) {
-                                basicClassLookingForImpl.getListOfError().add("Проверьте код станции " + stationCode2 + " в файле заявок");
-                                logger.error("Проверьте код станции " + stationCode2 + " в файле заявок");
+                if (!wagonKeyOfStationDestination.equals("")) {
+                    if (keyCargo.equals("000000")) {
+                        List<Object> listDistance = new ArrayList<>();
+                        listDistance.add(0);
+                        listDistance.add(0);
+                        listDistance.add(0);
+                        listDistance.add(null);
+                        listDistance.add(null);
+                        rootMapWithDistances.put(key, listDistance);
+                    } else {
+                        // Заполняем мапы расстояний
+                        if (!rootMapWithDistances.containsKey(key)) {
+                            List<Object> listDistance = getDistanceBetweenStations.getDistanceBetweenStations(wagonKeyOfStationDestination, routeKeyOfStationDeparture, keyCargo);
+                            int distance = Integer.parseInt((String)listDistance.get(0));
+                            if (distance == -20000) {
+                                classHandlerLookingFor.getBasicClassLookingFor().getListOfError().add(String.format("Не нашел расстояние между %s и %s", wagonKeyOfStationDestination, routeKeyOfStationDeparture));
+                                logger.error(String.format("Не нашел расстояние между %s и %s", wagonKeyOfStationDestination, routeKeyOfStationDeparture));
                                 iterator.remove();
+                                listWagon.remove(i);
                                 break;
-                            }
-                            if (!checkExistKeyOfStationImpl.checkExistKey(stationCode1)) {
-                                basicClassLookingForImpl.getListOfError().add("Проверьте код станции " + stationCode1 + " в файле дислокации вагонов");
-                                logger.error("Проверьте код станции {}", stationCode1 + " в файле дислокации вагонов");
-                                listOfWagons.remove(i);
-                                break;
-                            }
-                            if (checkExistKeyOfStationImpl.checkExistKey(stationCode2) && checkExistKeyOfStationImpl.checkExistKey(stationCode1)) {
-                                basicClassLookingForImpl.getListOfError().add("Не нашел расстояние между " + stationCode1 + " и " + stationCode2);
-                                logger.error("Не нашел расстояние между " + stationCode1 + " и " + stationCode2);
-                                break;
-                            }
-                        } else {
-                            if (distance != -20000) {
-                                rootMapWithDistances.put(key, listDistance);
                             } else {
-                                rootMapWithDistanceMoreMaxDist.put(key, listDistance);
+                                rootMapWithDistances.put(key, listDistance);
                             }
                         }
                     }
                 }
             }
         }
-
-        try {
-            fillMapsNotVipAndVip.separateMaps(mapOfRoutes);
-        } catch (NullPointerException e) {
-            logger.error("Map must not empty");
-        }
-
-        // Заменяем список вагонов после получения расстояний
-        getListOfWagonsImpl.replaceListOfWagon(listOfWagons);
-
-        logger.info("Stop process fill map with distances");
     }
 
     void serializeMap(HashMap<String, List<Object>> map) {
@@ -176,22 +139,6 @@ public class GetListOfDistanceImpl extends JavaHelperBase implements GetListOfDi
         return map;
     }
 
-    public Map<String, List<Integer>> getRootMapWithDistances() {
-        return rootMapWithDistances;
-    }
-
-    public void setRootMapWithDistances(Map<String, List<Integer>> rootMapWithDistances) {
-        this.rootMapWithDistances = rootMapWithDistances;
-    }
-
-    public Map<String, List<Integer>> getRootMapWithDistanceMoreMaxDist() {
-        return rootMapWithDistanceMoreMaxDist;
-    }
-
-    public void setRootMapWithDistanceMoreMaxDist(Map<String, List<Integer>> rootMapWithDistanceMoreMaxDist) {
-        this.rootMapWithDistanceMoreMaxDist = rootMapWithDistanceMoreMaxDist;
-    }
-
     public GetListOfRoutesImpl getGetListOfRoutesImpl() {
         return getListOfRoutesImpl;
     }
@@ -200,12 +147,52 @@ public class GetListOfDistanceImpl extends JavaHelperBase implements GetListOfDi
         this.getListOfRoutesImpl = getListOfRoutesImpl;
     }
 
+    public GetDistanceBetweenStationsImpl getGetDistanceBetweenStations() {
+        return getDistanceBetweenStations;
+    }
+
+    public void setGetDistanceBetweenStations(GetDistanceBetweenStationsImpl getDistanceBetweenStations) {
+        this.getDistanceBetweenStations = getDistanceBetweenStations;
+    }
+
     public GetListOfWagonsImpl getGetListOfWagonsImpl() {
         return getListOfWagonsImpl;
     }
 
     public void setGetListOfWagonsImpl(GetListOfWagonsImpl getListOfWagonsImpl) {
         this.getListOfWagonsImpl = getListOfWagonsImpl;
+    }
+
+    public ClassHandlerLookingForImpl getClassHandlerLookingFor() {
+        return classHandlerLookingFor;
+    }
+
+    public void setClassHandlerLookingFor(ClassHandlerLookingForImpl classHandlerLookingFor) {
+        this.classHandlerLookingFor = classHandlerLookingFor;
+    }
+
+    public Map<String, List<Object>> getRootMapWithDistances() {
+        return rootMapWithDistances;
+    }
+
+    public void setRootMapWithDistances(Map<String, List<Object>> rootMapWithDistances) {
+        this.rootMapWithDistances = rootMapWithDistances;
+    }
+
+    public Map<Integer, Route> getMapOfRoutes() {
+        return mapOfRoutes;
+    }
+
+    public void setMapOfRoutes(Map<Integer, Route> mapOfRoutes) {
+        this.mapOfRoutes = mapOfRoutes;
+    }
+
+    public List<Wagon> getListOfWagons() {
+        return listOfWagons;
+    }
+
+    public void setListOfWagons(List<Wagon> listOfWagons) {
+        this.listOfWagons = listOfWagons;
     }
 
     public Map<String, Integer> getRootMapWithTypeOfCargo() {

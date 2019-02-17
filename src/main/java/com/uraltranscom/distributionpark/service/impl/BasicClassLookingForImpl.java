@@ -66,7 +66,7 @@ public class BasicClassLookingForImpl extends JavaHelperBase implements BasicCla
         listOfError.clear();
 
         // Запускаем метод заполненеия первоначальной мапы расстояний
-        getListOfDistance.fillMap(routeId);
+        getListOfDistance.fillMap();
 
         // Заполняем мапы
         Map<Integer, Route> tempMapRoutesVip = fillMapsNotVipAndVip.getMapVIP();

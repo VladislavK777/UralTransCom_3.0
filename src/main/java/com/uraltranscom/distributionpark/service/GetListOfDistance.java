@@ -14,5 +14,5 @@ package com.uraltranscom.distributionpark.service;
  */
 
 public interface GetListOfDistance {
-    void fillMap(String routeId);
+    void fillMap();
 }

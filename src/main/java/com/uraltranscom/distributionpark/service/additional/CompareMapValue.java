@@ -18,11 +18,11 @@ import java.util.List;
  */
 
 public class CompareMapValue implements Comparable {
-    public List<Object> wagon;
+    public List<Object> list;
     public Integer distance;
 
-    public CompareMapValue(List<Object> wagon, Integer distance) {
-        this.wagon = wagon;
+    public CompareMapValue(List<Object> list, Integer distance) {
+        this.list = list;
         this.distance = distance;
     }
 

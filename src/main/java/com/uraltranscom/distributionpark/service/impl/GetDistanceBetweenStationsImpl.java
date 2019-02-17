@@ -38,9 +38,9 @@ public class GetDistanceBetweenStationsImpl extends ConnectionDB implements GetD
     }
 
     @Override
-    public List<Integer> getDistanceBetweenStations(String keyOfStationDeparture, String keyOfStationDestination, String keyCargo) {
+    public List<Object> getDistanceBetweenStations(String keyOfStationDeparture, String keyOfStationDestination, String keyCargo) {
 
-        List<Integer> listResult = new ArrayList<>();
+        List<Object> listResult = new ArrayList<>();
 
         try (Connection connection = getDataSource().getConnection();
              CallableStatement callableStatement = createCallableStatement(connection, keyOfStationDeparture, keyOfStationDestination, keyCargo);
