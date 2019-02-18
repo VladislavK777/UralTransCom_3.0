@@ -1,12 +1,14 @@
 package com.uraltranscom.distributionpark.service.impl;
 
-import com.uraltranscom.distributionpark.service.GetDistanceBetweenStations;
 import com.uraltranscom.distributionpark.util.ConnectionDB;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import java.sql.*;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,15 +31,14 @@ import java.util.List;
  *
  */
 
-@Service
-public class GetDistanceBetweenStationsImpl extends ConnectionDB implements GetDistanceBetweenStations {
+@Component
+public class GetDistanceBetweenStationsImpl extends ConnectionDB {
     // Подключаем логгер
     private static Logger logger = LoggerFactory.getLogger(GetDistanceBetweenStationsImpl.class);
 
     private GetDistanceBetweenStationsImpl() {
     }
 
-    @Override
     public List<Object> getDistanceBetweenStations(String keyOfStationDeparture, String keyOfStationDestination, String keyCargo) {
 
         List<Object> listResult = new ArrayList<>();

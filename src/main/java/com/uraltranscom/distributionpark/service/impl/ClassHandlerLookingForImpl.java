@@ -3,7 +3,6 @@ package com.uraltranscom.distributionpark.service.impl;
 import com.uraltranscom.distributionpark.model.Route;
 import com.uraltranscom.distributionpark.model.Wagon;
 import com.uraltranscom.distributionpark.model_ext.WagonFinalInfo;
-import com.uraltranscom.distributionpark.service.ClassHandlerLookingFor;
 import com.uraltranscom.distributionpark.service.additional.CompareMapValue;
 import com.uraltranscom.distributionpark.service.additional.JavaHelperBase;
 import org.slf4j.Logger;
@@ -31,7 +30,7 @@ import java.util.*;
  */
 
 @Component
-public class ClassHandlerLookingForImpl extends JavaHelperBase implements ClassHandlerLookingFor {
+public class ClassHandlerLookingForImpl extends JavaHelperBase {
     // Подключаем логгер
     private static Logger logger = LoggerFactory.getLogger(ClassHandlerLookingForImpl.class);
 
@@ -47,16 +46,15 @@ public class ClassHandlerLookingForImpl extends JavaHelperBase implements ClassH
 
     private Map<List<Object>, Integer> mapDistance = new HashMap<>();
 
-    @Override
-    public void lookingForOptimalMapOfRoute(Map<Integer, Route> mapOfRoutes, List<Wagon> tempListOfWagons) {
-        logger.info("Start root method: {}", this.getClass().getSimpleName() + ".fillMapRouteIsOptimal");
+    void lookingForOptimalMapOfRoute(Map<Integer, Route> mapOfRoutes, List<Wagon> tempListOfWagons) {
+        logger.info("Start method lookingForOptimalMapOfRoute");
 
         // Заполняем мапы
         List<Wagon> copyListOfWagon = new ArrayList<>(tempListOfWagons);
         Map<Integer, Route> tempMapOfRoutes = new HashMap<>(mapOfRoutes);
 
         // Запускаем цикл
-        Boolean isOk = true;
+        boolean isOk = true;
         while (isOk) {
             isOk = false;
 
@@ -81,18 +79,17 @@ public class ClassHandlerLookingForImpl extends JavaHelperBase implements ClassH
 
                 // Число дней пройденных вагоном
                 int countCircleDays = getFullMonthCircleOfWagonImpl.fullDays(wagon.getNumberOfWagon(), minDistance, route.getDistanceOfWay());
-                int getKeyNumber = 0;
 
                 for (int i = 0; i < copyListOfWagon.size(); i++) {
                     if (copyListOfWagon.get(i).getNumberOfWagon().equals(wagon.getNumberOfWagon())) {
-                        getKeyNumber = i;
+                        copyListOfWagon.remove(i);
                     }
                 }
 
-                copyListOfWagon.remove(getKeyNumber);
-
                 // Уменьшаем количество рейсов у маршрута
-                for (Map.Entry<Integer, Route> entry : tempMapOfRoutes.entrySet()) {
+                Iterator<Map.Entry<Integer, Route>> it = tempMapOfRoutes.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry<Integer, Route> entry = it.next();
                     if (entry.getValue().equals(route)) {
                         tempMapOfRoutes.put(entry.getKey(), new Route(tempMapOfRoutes.get(entry.getKey()).getKeyOfStationDeparture(),
                                 tempMapOfRoutes.get(entry.getKey()).getNameOfStationDeparture(),
@@ -108,11 +105,8 @@ public class ClassHandlerLookingForImpl extends JavaHelperBase implements ClassH
                     }
 
                     // Удаляем маршрут, если по нему 0 рейсов
-                    Iterator<Map.Entry<Integer, Route>> it = tempMapOfRoutes.entrySet().iterator();
-                    while (it.hasNext()) {
-                        if (tempMapOfRoutes.get(entry.getKey()).getCountOrders() == 0) {
-                            it.remove();
-                        }
+                    if (tempMapOfRoutes.get(entry.getKey()).getCountOrders() == 0) {
+                        it.remove();
                     }
                 }
 
@@ -120,11 +114,10 @@ public class ClassHandlerLookingForImpl extends JavaHelperBase implements ClassH
                 basicClassLookingFor.getTotalMapWithWagonNumberAndRoute().put(new WagonFinalInfo(wagon.getNumberOfWagon(), countCircleDays, minDistance), route);
 
                 isOk = true;
-
             }
         }
-
-        logger.info("Stop root method: {}", this.getClass().getSimpleName() + ".fillMapRouteIsOptimal");
+        getListOfDistance.serializeMap((HashMap<String, List<Object>>) getListOfDistance.getRootMapWithDistances());
+        logger.info("Finish method lookingForOptimalMapOfRoute");
     }
 
     private void lookingForMinDistance(List<Wagon> copyListOfWagon, Map<Integer, Route> tempMapOfRoutes) {
@@ -153,17 +146,18 @@ public class ClassHandlerLookingForImpl extends JavaHelperBase implements ClassH
 
                     // Ищем расстояние
                     if (getListOfDistance.getRootMapWithDistances().containsKey(key)) {
-                        if (Integer.parseInt((String)getListOfDistance.getRootMapWithDistances().get(key).get(2)) != -1) {
+                        if (Integer.parseInt(getListOfDistance.getRootMapWithDistances().get(key).get(2).toString()) != -1) {
                             list.add(getListOfDistance.getRootMapWithDistances().get(key));
-                            mapDistance.put(list, Integer.parseInt((String)getListOfDistance.getRootMapWithDistances().get(key).get(2)));
+                            mapDistance.put(list, Integer.parseInt(getListOfDistance.getRootMapWithDistances().get(key).get(2).toString()));
                         }
                     }
                 }
             }
         }
+        //logger.info("Finish method lookingForMinDistance");
     }
 
-    public BasicClassLookingForImpl getBasicClassLookingFor() {
+    BasicClassLookingForImpl getBasicClassLookingFor() {
         return basicClassLookingFor;
     }
 

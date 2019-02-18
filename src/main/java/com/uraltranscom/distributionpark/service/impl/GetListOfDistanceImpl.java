@@ -2,13 +2,11 @@ package com.uraltranscom.distributionpark.service.impl;
 
 import com.uraltranscom.distributionpark.model.Route;
 import com.uraltranscom.distributionpark.model.Wagon;
-import com.uraltranscom.distributionpark.service.GetListOfDistance;
-import com.uraltranscom.distributionpark.service.additional.FillMapsNotVipAndVip;
 import com.uraltranscom.distributionpark.service.additional.JavaHelperBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.util.*;
@@ -28,8 +26,8 @@ import java.util.*;
  *
  */
 
-@Service
-public class GetListOfDistanceImpl extends JavaHelperBase implements GetListOfDistance {
+@Component
+public class GetListOfDistanceImpl extends JavaHelperBase {
     // Подключаем логгер
     private static Logger logger = LoggerFactory.getLogger(GetListOfDistanceImpl.class);
 
@@ -42,7 +40,7 @@ public class GetListOfDistanceImpl extends JavaHelperBase implements GetListOfDi
     @Autowired
     private ClassHandlerLookingForImpl classHandlerLookingFor;
     @Autowired
-    private FillMapsNotVipAndVip fillMapsNotVipAndVip;
+    private GetTypeOfCargoImpl getTypeOfCargo;
 
     // Основная мапа
     private Map<String, List<Object>> rootMapWithDistances;
@@ -53,23 +51,16 @@ public class GetListOfDistanceImpl extends JavaHelperBase implements GetListOfDi
     // Мапа хранит классы грузов
     private Map<String, Integer> rootMapWithTypeOfCargo = new HashMap<>();
 
-    @Override
     public void fillMap() {
         logger.info("Start process fill map with distances");
         rootMapWithDistances = deSerializeMap();
         mapOfRoutes = new HashMap<>(getListOfRoutesImpl.getMapOfRoutes());
         listOfWagons = new ArrayList<>(getListOfWagonsImpl.getListOfWagons());
-        logger.info("Stop process fill map with distances");
-
-        try {
-            fillMapsNotVipAndVip.separateMaps(mapOfRoutes);
-        } catch (NullPointerException e) {
-            logger.error("Map must not empty");
-        }
+        logger.info("Finish process fill map with distances");
     }
 
     public void fillRootMapWithDistances(List<Wagon> listWagon, Map<Integer, Route> mapRoutes) {
-        logger.info("Start method fillRootMapWithDistances");
+        //logger.info("Start method fillRootMapWithDistances");
         Iterator<Map.Entry<Integer, Route>> iterator = mapRoutes.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<Integer, Route> entry = iterator.next();
@@ -80,7 +71,12 @@ public class GetListOfDistanceImpl extends JavaHelperBase implements GetListOfDi
                 String keyCargo = listWagon.get(i).getKeyItemCargo();
                 String key = wagonKeyOfStationDestination + "_" + routeKeyOfStationDeparture + "_" + keyCargo;
 
-                if (!wagonKeyOfStationDestination.equals("") || !wagonKeyOfStationDestination.equals("000000")) {
+                if (!rootMapWithTypeOfCargo.containsKey(keyCargo)) {
+                    int type = getTypeOfCargo.getTypeOfCargo(keyCargo);
+                    rootMapWithTypeOfCargo.put(keyCargo, type);
+                }
+
+                if (!wagonKeyOfStationDestination.equals("")) {
                     if (keyCargo.equals("000000")) {
                         List<Object> listDistance = new ArrayList<>();
                         listDistance.add(0);
@@ -108,6 +104,7 @@ public class GetListOfDistanceImpl extends JavaHelperBase implements GetListOfDi
                 }
             }
         }
+        //logger.info("Finish method fillRootMapWithDistances");
     }
 
     void serializeMap(HashMap<String, List<Object>> map) {
@@ -137,8 +134,7 @@ public class GetListOfDistanceImpl extends JavaHelperBase implements GetListOfDi
         }
         Map<String, List<Object>> map = new HashMap<>();
         try (FileInputStream fileInputStream = new FileInputStream (file);
-             ObjectInputStream objectInputStream = new ObjectInputStream (fileInputStream))
-        {
+             ObjectInputStream objectInputStream = new ObjectInputStream (fileInputStream)) {
             map = (Map<String, List<Object>>) objectInputStream.readObject();
             logger.info("Карты успешно загружены");
         } catch (Exception e) {

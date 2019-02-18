@@ -24,7 +24,6 @@ package com.uraltranscom.distributionpark.service.impl;
 import com.uraltranscom.distributionpark.model.Route;
 import com.uraltranscom.distributionpark.model.additional_model.VolumePeriod;
 import com.uraltranscom.distributionpark.model.additional_model.WagonType;
-import com.uraltranscom.distributionpark.service.GetList;
 import com.uraltranscom.distributionpark.service.additional.JavaHelperBase;
 import org.apache.poi.openxml4j.exceptions.OLE2NotOfficeXmlFileException;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -32,7 +31,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,8 +39,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Service
-public class GetListOfRoutesImpl extends JavaHelperBase implements GetList {
+@Component
+public class GetListOfRoutesImpl extends JavaHelperBase {
     // Подключаем логгер
     private static Logger logger = LoggerFactory.getLogger(GetListOfRoutesImpl.class);
 
@@ -61,7 +60,7 @@ public class GetListOfRoutesImpl extends JavaHelperBase implements GetList {
 
     // Заполняем Map вагонами
     // TODO Переписать метод, избавиться от формата жесткого, необходимо и XLSX и XLS
-    @Override
+
     public void fillMap() {
         mapOfRoutes.clear();
         // Получаем файл формата xls
