@@ -29,11 +29,14 @@
     </bean>
 
     <!-- устанавливаем соединение -->
-    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" lazy-init="false"  destroy-method="close">
-        <property name="driverClassName" value="org.postgresql.Driver"/>
-        <property name="url" value="#{zkSettingsHolder.dataBase}"/>
-        <property name="username" value="#{zkSettingsHolder.user}"/>
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="org.postgresql.Driver"/>
+        <property name="jdbcUrl" value="#{zkSettingsHolder.dataBase}"/>
+        <property name="user" value="#{zkSettingsHolder.user}"/>
         <property name="password" value="#{decodedPassword}"/>
+        <property name="maxPoolSize" value="100" />
+        <property name="maxStatements" value="15" />
+        <property name="maxStatementsPerConnection" value="5" />
     </bean>
 
     <bean class="com.uraltranscom.distributionpark.util.ConnectionDB">
