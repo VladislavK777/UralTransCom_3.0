@@ -1,5 +1,7 @@
 package com.uraltranscom.distributionpark.util;
 
+import org.springframework.stereotype.Component;
+
 import javax.sql.DataSource;
 
 /**
@@ -21,8 +23,12 @@ import javax.sql.DataSource;
  *
  */
 
+@Component
 public class ConnectionDB {
     private static DataSource dataSource;
+
+    public ConnectionDB() {
+    }
 
     public static DataSource getDataSource() {
         return dataSource;

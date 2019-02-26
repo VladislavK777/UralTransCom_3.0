@@ -59,8 +59,8 @@ public class BasicController {
     }
 
     @RequestMapping(value = "/reports", method = RequestMethod.POST)
-    public String reportList(@RequestParam(value = "routeId", defaultValue = "") String routeId, Model model) {
-        basicClassLookingForImpl.fillMapRouteIsOptimal(routeId);
+    public String reportList(Model model) {
+        basicClassLookingForImpl.fillMapRouteIsOptimal();
         model.addAttribute("reportListOfDistributedRoutesAndWagons", basicClassLookingForImpl.getListOfDistributedRoutesAndWagons());
         model.addAttribute("reportListOfError", basicClassLookingForImpl.getListOfError());
         return "welcome";

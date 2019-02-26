@@ -1,10 +1,9 @@
 package com.uraltranscom.distributionpark.service.impl;
 
-import com.uraltranscom.distributionpark.service.GetFullMonthCircleOfWagon;
 import com.uraltranscom.distributionpark.service.additional.JavaHelperBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  *
@@ -23,15 +22,14 @@ import org.springframework.stereotype.Service;
  *
  */
 
-@Service
-public class GetFullMonthCircleOfWagonImpl extends JavaHelperBase implements GetFullMonthCircleOfWagon {
+@Component
+public class GetFullMonthCircleOfWagonImpl extends JavaHelperBase {
     // Подключаем логгер
     private static Logger logger = LoggerFactory.getLogger(GetFullMonthCircleOfWagonImpl.class);
 
     private GetFullMonthCircleOfWagonImpl() {
     }
 
-    @Override
     public int fullDays(String typeOfWagon, Integer distanceOfEmpty, String distanceOfRoute) {
         int fullMonthCircle = 0;
 

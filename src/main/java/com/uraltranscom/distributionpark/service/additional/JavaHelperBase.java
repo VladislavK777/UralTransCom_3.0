@@ -1,5 +1,7 @@
 package com.uraltranscom.distributionpark.service.additional;
 
+import com.uraltranscom.distributionpark.util.GetPathSaveFile;
+
 /**
  *
  * Класс-помощник содержит основные константы
@@ -30,6 +32,9 @@ public class JavaHelperBase {
     public static final String PREFIX_ONE_DAY = "день";
     public static final String PREFIX_2_4_DAYS = "дня";
     public static final String PREFIX_5_10_DAYS = "дней";
+
+    // Путь к файлу серилизации сохраненных карт расстояний
+    public static final String PATH_SAVE_FILE_MAP = GetPathSaveFile.getPathTomcat();
 
     // Максимальное расстояние для пустого вагона
     public static final int MAX_DISTANCE_RUS_TO_RUS = 600; // Внутри России

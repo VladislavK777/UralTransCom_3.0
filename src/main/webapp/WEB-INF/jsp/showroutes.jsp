@@ -142,7 +142,6 @@
                         <td style="background: #ffffff; color: #364274;">${list.value.getCustomer()}</td>
                         <td style="background: #ffffff; color: #364274;">${list.value.getCountOrders()}</td>
                         <td style="background: #ffffff; color: #364274;">${list.value.getDistanceOfWay()}</td>
-                        <!-- <td style="background: #ffffff; color: #364274;"><input type="checkbox" name="routeId" value="${list.key}" /></td> -->
                     </tr>
                 </c:forEach>
             </c:if>

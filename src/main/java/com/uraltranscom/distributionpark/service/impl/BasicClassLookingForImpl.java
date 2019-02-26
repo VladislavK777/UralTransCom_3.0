@@ -2,16 +2,17 @@ package com.uraltranscom.distributionpark.service.impl;
 
 import com.uraltranscom.distributionpark.model.Route;
 import com.uraltranscom.distributionpark.model.Wagon;
-import com.uraltranscom.distributionpark.service.BasicClassLookingFor;
 import com.uraltranscom.distributionpark.model_ext.WagonFinalInfo;
-import com.uraltranscom.distributionpark.service.additional.FillMapsNotVipAndVip;
 import com.uraltranscom.distributionpark.service.additional.JavaHelperBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -32,17 +33,13 @@ import java.util.*;
  *
  */
 
-@Service
-public class BasicClassLookingForImpl extends JavaHelperBase implements BasicClassLookingFor {
+@Component
+public class BasicClassLookingForImpl extends JavaHelperBase {
     // Подключаем логгер
     private static Logger logger = LoggerFactory.getLogger(BasicClassLookingForImpl.class);
 
     @Autowired
-    private GetListOfWagonsImpl getListOfWagons;
-    @Autowired
     private GetListOfDistanceImpl getListOfDistance;
-    @Autowired
-    private FillMapsNotVipAndVip fillMapsNotVipAndVip;
     @Autowired
     private ClassHandlerLookingForImpl classHandlerLookingFor;
 
@@ -58,35 +55,24 @@ public class BasicClassLookingForImpl extends JavaHelperBase implements BasicCla
     private BasicClassLookingForImpl() {
     }
 
-    @Override
-    public void fillMapRouteIsOptimal(String routeId) {
+    public void fillMapRouteIsOptimal() {
         // Очищаем массивы итоговые
         totalMapWithWagonNumberAndRoute.clear();
         listOfDistributedRoutesAndWagons.clear();
         listOfError.clear();
 
         // Запускаем метод заполненеия первоначальной мапы расстояний
-        getListOfDistance.fillMap(routeId);
+        getListOfDistance.fillMap();
 
         // Заполняем мапы
-        Map<Integer, Route> tempMapRoutesVip = fillMapsNotVipAndVip.getMapVIP();
-        Map<Integer, Route> tempMapRoutesNotVip = fillMapsNotVipAndVip.getMapNotVIP();
-        List<Wagon> tempListOfWagons = getListOfWagons.getListOfWagons();
+        Map<Integer, Route> tempMapRoutes = getGetListOfDistance().getMapOfRoutes();
+        List<Wagon> tempListOfWagons = getGetListOfDistance().getListOfWagons();
 
-        // Запускаем распределение для VIP
-        if (!tempMapRoutesVip.isEmpty()) {
-            classHandlerLookingFor.lookingForOptimalMapOfRoute(tempMapRoutesVip, tempListOfWagons);
-        }
-
-        // Запускаем распределение для неVIP
-        if (!tempMapRoutesNotVip.isEmpty()) {
-            classHandlerLookingFor.lookingForOptimalMapOfRoute(tempMapRoutesNotVip, tempListOfWagons);
-        }
+        classHandlerLookingFor.lookingForOptimalMapOfRoute(tempMapRoutes, tempListOfWagons);
 
         // очищаем мапы
         tempListOfWagons.clear();
-        tempMapRoutesVip.clear();
-        tempMapRoutesNotVip.clear();
+        tempMapRoutes.clear();
     }
 
     public Map<WagonFinalInfo, Route> getTotalMapWithWagonNumberAndRoute() {

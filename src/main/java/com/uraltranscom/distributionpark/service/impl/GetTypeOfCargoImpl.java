@@ -1,10 +1,9 @@
 package com.uraltranscom.distributionpark.service.impl;
 
 import com.uraltranscom.distributionpark.util.ConnectionDB;
-import com.uraltranscom.distributionpark.service.GetTypeOfCargo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -24,15 +23,14 @@ import java.sql.SQLException;
  *
  */
 
-@Service
-public class GetTypeOfCargoImpl extends ConnectionDB implements GetTypeOfCargo {
+@Component
+public class GetTypeOfCargoImpl extends ConnectionDB {
     // Подключаем логгер
     private static Logger logger = LoggerFactory.getLogger(GetTypeOfCargoImpl.class);
 
     public GetTypeOfCargoImpl() {
     }
 
-    @Override
     public int getTypeOfCargo(String key) {
 
         int type = 0;
@@ -51,7 +49,7 @@ public class GetTypeOfCargoImpl extends ConnectionDB implements GetTypeOfCargo {
     }
 
     private CallableStatement createCallableStatement(Connection connection, String key) throws SQLException {
-        CallableStatement callableStatement = connection.prepareCall(" { call getclassofcargo(?) } ");
+        CallableStatement callableStatement = connection.prepareCall(" { call public.getclassofcargo(?) } ");
         callableStatement.setString(1, key);
         return callableStatement;
     }

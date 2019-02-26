@@ -1,7 +1,6 @@
 package com.uraltranscom.distributionpark.service.impl;
 
 import com.uraltranscom.distributionpark.model.Wagon;
-import com.uraltranscom.distributionpark.service.GetList;
 import com.uraltranscom.distributionpark.service.export.WriteToFileExcel;
 import org.apache.poi.openxml4j.exceptions.OLE2NotOfficeXmlFileException;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -10,7 +9,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,8 +42,8 @@ import java.util.List;
  *
  */
 
-@Service
-public class GetListOfWagonsImpl implements GetList {
+@Component
+public class GetListOfWagonsImpl  {
     // Подключаем логгер
     private static Logger logger = LoggerFactory.getLogger(GetListOfWagonsImpl.class);
 
@@ -67,7 +66,6 @@ public class GetListOfWagonsImpl implements GetList {
 
     // Заполняем Map вагонами
     // TODO Переписать метод, отвязать от количества строк, избавиться от формата жесткого, необходимо и XLSX и XLS
-    @Override
     public void fillMap() {
         listOfWagons.clear();
         writeToFileExcel.setFile(null);

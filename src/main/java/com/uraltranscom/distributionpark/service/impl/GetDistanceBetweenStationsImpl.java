@@ -1,12 +1,14 @@
 package com.uraltranscom.distributionpark.service.impl;
 
-import com.uraltranscom.distributionpark.service.GetDistanceBetweenStations;
 import com.uraltranscom.distributionpark.util.ConnectionDB;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import java.sql.*;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,24 +31,23 @@ import java.util.List;
  *
  */
 
-@Service
-public class GetDistanceBetweenStationsImpl extends ConnectionDB implements GetDistanceBetweenStations {
+@Component
+public class GetDistanceBetweenStationsImpl extends ConnectionDB {
     // Подключаем логгер
     private static Logger logger = LoggerFactory.getLogger(GetDistanceBetweenStationsImpl.class);
 
     private GetDistanceBetweenStationsImpl() {
     }
 
-    @Override
-    public List<Integer> getDistanceBetweenStations(String keyOfStationDeparture, String keyOfStationDestination) {
+    public List<Object> getDistanceBetweenStations(String keyOfStationDeparture, String keyOfStationDestination, String keyCargo) {
 
-        List<Integer> listResult = new ArrayList<>();
+        List<Object> listResult = new ArrayList<>();
 
         try (Connection connection = getDataSource().getConnection();
-             CallableStatement callableStatement = createCallableStatement(connection, keyOfStationDeparture, keyOfStationDestination);
+             CallableStatement callableStatement = createCallableStatement(connection, keyOfStationDeparture, keyOfStationDestination, keyCargo);
              ResultSet resultSet = callableStatement.executeQuery()) {
             while (resultSet.next()) {
-                listResult.add(resultSet.getInt(1));
+                listResult.add(resultSet.getObject(1));
             }
             logger.debug("Get distance for: {}", keyOfStationDeparture + "_" + keyOfStationDestination + ": " + listResult.get(0));
         } catch (SQLException sqlEx) {
@@ -55,10 +56,11 @@ public class GetDistanceBetweenStationsImpl extends ConnectionDB implements GetD
         return listResult;
     }
 
-    private CallableStatement createCallableStatement(Connection connection, String keyOfStationDeparture, String keyOfStationDestination) throws SQLException {
-        CallableStatement callableStatement = connection.prepareCall(" { call test_distance.get_root_distance(?,?) } ");
+    private CallableStatement createCallableStatement(Connection connection, String keyOfStationDeparture, String keyOfStationDestination, String keyCargo) throws SQLException {
+        CallableStatement callableStatement = connection.prepareCall(" { call  test_distance.get_root_distance2(?,?,?) } ");
         callableStatement.setString(1, keyOfStationDeparture);
         callableStatement.setString(2, keyOfStationDestination);
+        callableStatement.setString(3, keyCargo);
         return callableStatement;
     }
 }
