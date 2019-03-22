@@ -80,5 +80,6 @@
     <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-jdbc:9.0.6" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-juli:9.0.6" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.mockito:mockito-all:1.10.8" level="project" />
+    <orderEntry type="library" name="Maven: com.zaxxer:HikariCP:3.3.1" level="project" />
   </component>
 </module>

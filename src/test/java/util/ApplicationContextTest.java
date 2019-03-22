@@ -1,7 +1,7 @@
 package util;
 
 import com.uraltranscom.distributionpark.util.ZookeeperSettingHolder;
-import org.apache.tomcat.jdbc.pool.DataSource;
+import com.zaxxer.hikari.HikariDataSource;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +28,7 @@ public class ApplicationContextTest {
 
     @Test
     public void testGetConnection() throws SQLException {
-        DataSource dataSource = applicationContext.getBean("dataSource", DataSource.class);
+        HikariDataSource dataSource = applicationContext.getBean("dataSource", HikariDataSource.class);
         Assert.assertNotNull(dataSource);
     }
 }
