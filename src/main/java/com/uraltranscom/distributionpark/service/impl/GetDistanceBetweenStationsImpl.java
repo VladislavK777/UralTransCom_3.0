@@ -40,7 +40,6 @@ public class GetDistanceBetweenStationsImpl extends ConnectionDB {
     }
 
     public List<Object> getDistanceBetweenStations(String keyOfStationDeparture, String keyOfStationDestination, String keyCargo) {
-
         List<Object> listResult = new ArrayList<>();
 
         try (Connection connection = getDataSource().getConnection();

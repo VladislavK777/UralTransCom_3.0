@@ -1,8 +1,7 @@
 package com.uraltranscom.distributionpark.util;
 
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.stereotype.Component;
-
-import javax.sql.DataSource;
 
 /**
  *
@@ -25,16 +24,16 @@ import javax.sql.DataSource;
 
 @Component
 public class ConnectionDB {
-    private static DataSource dataSource;
+    private static HikariDataSource dataSource;
 
     public ConnectionDB() {
     }
 
-    public static DataSource getDataSource() {
+    public static HikariDataSource getDataSource() {
         return dataSource;
     }
 
-    public static void setDataSource(DataSource dataSource) {
+    public static void setDataSource(HikariDataSource dataSource) {
         ConnectionDB.dataSource = dataSource;
     }
 }

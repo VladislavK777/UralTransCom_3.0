@@ -29,14 +29,19 @@
     </bean>
 
     <!-- устанавливаем соединение -->
-    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" lazy-init="false"  destroy-method="close">
+    <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
         <property name="driverClassName" value="org.postgresql.Driver"/>
-        <property name="url" value="#{zkSettingsHolder.dataBase}"/>
+        <property name="jdbcUrl" value="#{zkSettingsHolder.dataBase}"/>
         <property name="username" value="#{zkSettingsHolder.user}"/>
         <property name="password" value="#{decodedPassword}"/>
+        <property name="maximumPoolSize" value="20" />
     </bean>
 
-    <bean id="dataSourceInit" class="com.uraltranscom.distributionpark.util.ConnectionDB">
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <constructor-arg ref="hikariConfig" />
+    </bean>
+
+    <bean class="com.uraltranscom.distributionpark.util.ConnectionDB">
         <property name="dataSource" ref="dataSource"/>
     </bean>
 </beans>
